@@ -1,0 +1,109 @@
+# infra/k8s-deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agrisathi-model
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agrisathi-model
+  template:
+    metadata:
+      labels:
+        app: agrisathi-model
+    spec:
+      containers:
+      - name: model
+        image: haashimaslam/agrisathi-model:latest
+        imagePullPolicy: Never  # <-- CRITICAL: Use local image
+        ports:
+        - containerPort: 8000
+        env:
+        - name: MODEL_PATH
+          value: "/models/plant-disease-model.h5"
+        volumeMounts:
+        - name: model-storage
+          mountPath: /models
+      volumes:
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: model-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agrisathi-model-service
+spec:
+  selector:
+    app: agrisathi-model
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agrisathi-streamlit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agrisathi-streamlit
+  template:
+    metadata:
+      labels:
+        app: agrisathi-streamlit
+    spec:
+      containers:
+      - name: streamlit
+        image: haashimaslam/agrisathi-streamlit:latest
+        imagePullPolicy: Never  # <-- CRITICAL: Use local image
+        ports:
+        - containerPort: 8501
+        env:
+        - name: MODEL_SERVER_URL
+          value: "http://agrisathi-model-service/predict"
+        - name: OWM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: agrisathi-secrets
+              key: owm_api_key
+        - name: TWILIO_SID
+          valueFrom:
+            secretKeyRef:
+              name: agrisathi-secrets
+              key: twilio_sid
+        - name: TWILIO_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: agrisathi-secrets
+              key: twilio_token
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agrisathi-streamlit-service
+spec:
+  type: LoadBalancer  # <-- Keep this for local access
+  selector:
+    app: agrisathi-streamlit
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8501
+---
+# Persistent Volume Claim for the model file
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: model-pvc
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 1Gi
+
+# NOTE: Ingress section has been removed for simplicity in local testing

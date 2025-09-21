@@ -1,0 +1,23 @@
+services:
+  model:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.modelserver
+    image: agrisathi-model
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../models:/models
+
+  streamlit:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.streamlit
+    image: agrisathi-streamlit
+    ports:
+      - "8501:8501"
+    environment:
+      MODEL_SERVER_URL: http://model:8000/predict
+      OWM_API_KEY: ${OWM_API_KEY}
+    depends_on:
+      - model

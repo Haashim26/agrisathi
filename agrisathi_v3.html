@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1B5E20">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AgriSathi">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>AgriSathi – Kisan AI v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--g1:#0B3318;--g2:#1B5E20;--g3:#2E7D32;--g4:#43A047;--gbg:#E8F5E9;--gbd:#A5D6A7;
+--amb:#E65100;--abg:#FFF3E0;--abd:#FFCC80;--blu:#1565C0;--bbg:#E3F2FD;--bbd:#90CAF9;
+--tel:#00695C;--tbg:#E0F2F1;--tbd:#80CBC4;--brn:#5D4037;--brnbg:#EFEBE9;--brnbd:#BCAAA4;
+--red:#C62828;--rbg:#FFEBEE;--bg:#F0F4F0;--card:#fff;--border:rgba(46,125,50,0.15);
+--text:#1A2E1A;--muted:#6A8C6A;--shadow:0 4px 24px rgba(27,94,32,0.10);--r:18px;--nav:66px;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);}
+.screen{display:none;position:absolute;inset:0;background:var(--bg);z-index:1;}.screen.on{display:flex;flex-direction:column;}
+.pane{display:none;flex-direction:column;position:absolute;top:0;left:0;right:0;bottom:var(--nav);overflow:hidden;background:var(--bg);}.pane.on{display:flex;}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;}
+.hidden{display:none!important;}
+
+/* LANG SCREEN */
+#lang-screen{background:linear-gradient(160deg,#0B3318,#1B5E20 35%,#2E7D32 65%,#43A047);align-items:center;overflow-y:auto;padding-bottom:48px;}
+.lh{text-align:center;padding:60px 24px 32px;width:100%;}
+.lh-orb{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 16px;animation:breathe 3s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.lh-title{font-size:40px;font-weight:900;color:#fff;letter-spacing:-1px;}
+.lh-title em{color:#A5D6A7;font-style:normal;}
+.lh-sub{font-size:13px;color:rgba(255,255,255,0.6);margin-top:5px;font-weight:600;}
+.lb{width:100%;max-width:440px;padding:0 18px;}
+.ll{font-size:10px;font-weight:900;color:rgba(255,255,255,0.4);letter-spacing:2.5px;margin-bottom:14px;text-align:center;}
+.lg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px;}
+.lc{background:rgba(255,255,255,0.09);border:1.5px solid rgba(255,255,255,0.18);border-radius:20px;padding:20px 14px;cursor:pointer;text-align:center;transition:all .18s;position:relative;}
+.lc:active{transform:scale(0.94);}.lc.on{background:rgba(255,255,255,0.96);border-color:#fff;}
+.lc-ck{position:absolute;top:10px;right:10px;width:22px;height:22px;background:var(--g2);border-radius:50%;color:#fff;font-size:12px;font-weight:900;display:none;align-items:center;justify-content:center;}
+.lc.on .lc-ck{display:flex;}.lc-f{font-size:34px;display:block;margin-bottom:8px;}
+.lc-n{font-size:16px;font-weight:800;color:#fff;}.lc.on .lc-n{color:var(--g1);}
+.lc-s{font-size:12px;color:rgba(255,255,255,0.55);margin-top:2px;font-weight:600;}.lc.on .lc-s{color:var(--g2);}
+.lgo{width:100%;background:#fff;color:var(--g1);border:none;border-radius:16px;padding:17px;font-size:17px;font-weight:900;font-family:'Nunito',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 24px rgba(0,0,0,0.22);transition:all .2s;opacity:0.38;pointer-events:none;}
+.lgo.on{opacity:1;pointer-events:all;}.lgo:active{transform:scale(0.97);}
+
+/* NAV */
+#app{}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;height:var(--nav);background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;align-items:stretch;z-index:200;box-shadow:0 -4px 20px rgba(27,94,32,0.08);}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:5px 2px;position:relative;}
+.ni::after{content:'';position:absolute;top:0;left:24%;right:24%;height:3px;background:var(--g3);border-radius:0 0 4px 4px;transform:scaleX(0);transition:transform .2s;}
+.ni.on::after{transform:scaleX(1);}
+.ni-i{width:36px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:19px;transition:background .18s;}
+.ni.on .ni-i{background:var(--gbg);}
+.ni-l{font-size:9.5px;font-weight:800;color:var(--muted);}.ni.on .ni-l{color:var(--g2);}
+
+/* HEADERS */
+.hdr{padding:48px 20px 22px;color:#fff;position:relative;overflow:hidden;}
+.hdr.G{background:linear-gradient(148deg,var(--g1),var(--g2),var(--g3),#388E3C);}
+.hdr.B{background:linear-gradient(148deg,#0A2472,#0D47A1,var(--blu),#1976D2);}
+.hdr.T{background:linear-gradient(148deg,#003D33,#00574B,var(--tel),#00796B);}
+.hdr.W{background:linear-gradient(148deg,#3E2723,var(--brn),#6D4C41);}
+.hdr.A{background:linear-gradient(148deg,#BF360C,var(--amb),#F57C00);}
+.orb{position:absolute;border-radius:50%;background:rgba(255,255,255,0.055);pointer-events:none;}
+.orb.a{width:170px;height:170px;right:-45px;top:-45px;}.orb.b{width:100px;height:100px;left:-25px;bottom:-30px;}
+.hb{font-size:10px;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:1.5px;margin-bottom:4px;}
+.ht{font-size:25px;font-weight:900;letter-spacing:-.3px;}.hs{font-size:13px;color:rgba(255,255,255,0.65);margin-top:4px;font-weight:600;}
+
+/* COMMON */
+.stack{display:flex;flex-direction:column;gap:13px;padding:14px;}
+.fld{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;}
+.fld:focus-within{border-color:var(--g3);}
+.fl{padding:11px 15px 0;font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1.2px;}
+.fld select,.fld textarea{width:100%;padding:8px 15px 13px;font-size:15px;font-family:'Nunito',sans-serif;font-weight:700;border:none;outline:none;background:transparent;color:var(--text);-webkit-appearance:none;}
+.fld textarea{resize:none;line-height:1.6;}
+.btn{border:none;border-radius:14px;padding:16px 20px;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:9px;color:#fff;transition:all .18s;}
+.btn:active{transform:scale(0.96);}.btn:disabled{opacity:0.42;transform:none;}
+.btn.g{background:linear-gradient(135deg,var(--g1),var(--g3));box-shadow:0 4px 16px rgba(27,94,32,0.28);}
+.btn.b{background:linear-gradient(135deg,#0A2472,var(--blu));box-shadow:0 4px 16px rgba(21,101,192,0.28);}
+.btn.t{background:linear-gradient(135deg,#003D33,var(--tel));box-shadow:0 4px 16px rgba(0,105,92,0.28);}
+.btn.w{background:linear-gradient(135deg,#3E2723,var(--brn));box-shadow:0 4px 16px rgba(93,64,55,0.28);}
+.btn.a{background:linear-gradient(135deg,#BF360C,var(--amb));box-shadow:0 4px 16px rgba(230,81,0,0.28);}
+.rbox{display:none;background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:18px;box-shadow:var(--shadow);animation:popUp .3s ease both;}
+.rbox.on{display:block;}
+@keyframes popUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.rl{font-size:10px;font-weight:800;color:var(--g2);letter-spacing:1.2px;margin-bottom:10px;}
+.rt{font-size:13.5px;line-height:1.78;color:var(--text);white-space:pre-wrap;font-weight:600;}
+.dots{display:inline-flex;gap:5px;align-items:center;}
+.dots i{width:7px;height:7px;border-radius:50%;background:currentColor;display:block;animation:dp 1.1s ease-in-out infinite;}
+.dots i:nth-child(2){animation-delay:.18s}.dots i:nth-child(3){animation-delay:.36s}
+@keyframes dp{0%,80%,100%{transform:scale(0.4);opacity:.3}40%{transform:scale(1);opacity:1}}
+.sh{font-size:15px;font-weight:800;}
+
+/* HOME */
+.hb2{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;padding:14px;display:flex;flex-direction:column;gap:14px;}
+.vc{background:linear-gradient(148deg,var(--g1),var(--g2),var(--g3));border-radius:24px;padding:18px;box-shadow:0 8px 28px rgba(27,94,32,0.3);position:relative;overflow:hidden;}
+.vc::before{content:'🌾';position:absolute;right:-8px;bottom:-14px;font-size:100px;opacity:.07;pointer-events:none;}
+.vcb{font-size:10px;font-weight:900;color:rgba(255,255,255,.48);letter-spacing:2px;text-align:center;margin-bottom:10px;}
+.vcm{width:100%;background:rgba(255,255,255,.97);border:none;border-radius:18px;padding:18px 16px;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 4px 20px rgba(0,0,0,.14);transition:all .15s;animation:pp 2.5s ease-in-out infinite;}
+@keyframes pp{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.14)}50%{box-shadow:0 4px 28px rgba(0,0,0,.24)}}
+.vcm:active{transform:scale(0.96)!important;animation:none;}
+.vci{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g3));display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0;box-shadow:0 3px 12px rgba(27,94,32,0.3);}
+.vct{flex:1;text-align:left;}
+.vct1{font-size:20px;font-weight:900;color:var(--g1);line-height:1.2;}
+.vct2{font-size:13px;color:var(--g2);margin-top:3px;font-weight:600;}
+.vch{font-size:11px;color:rgba(255,255,255,.45);text-align:center;margin-top:10px;font-weight:700;}
+.ivrs{background:linear-gradient(135deg,#0D47A1,var(--blu));border-radius:20px;padding:14px 17px;color:#fff;display:flex;align-items:center;gap:13px;cursor:pointer;box-shadow:0 4px 20px rgba(21,101,192,0.25);transition:transform .15s;}
+.ivrs:active{transform:scale(0.96);}
+.ivrs-ph{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.ivrs-tx{flex:1;}
+.sr{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sc{background:var(--card);border-radius:15px;padding:14px;border:1.5px solid var(--border);cursor:pointer;box-shadow:var(--shadow);transition:transform .15s;}
+.sc:active{transform:scale(0.95);}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.tb{background:var(--card);border-radius:15px;padding:14px 8px;text-align:center;cursor:pointer;border:1.5px solid var(--border);box-shadow:var(--shadow);transition:all .15s;}
+.tb:active{transform:scale(0.93);background:var(--gbg);}
+.te{font-size:26px;display:block;margin-bottom:7px;}
+.tl{font-size:11px;font-weight:800;color:var(--g2);}
+.tip{background:linear-gradient(135deg,#FFFBF0,#FFF7E0);border-radius:18px;padding:15px;border:1.5px solid var(--abd);display:flex;gap:13px;align-items:flex-start;}
+.te2{font-size:28px;flex-shrink:0;margin-top:1px;}
+
+/* ADVISORY - big crop emoji buttons */
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.cb{background:var(--card);border:2px solid var(--border);border-radius:15px;padding:13px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.cb.on{background:var(--gbg);border-color:var(--g3);}
+.cb:active{transform:scale(0.92);}
+.ce{font-size:28px;display:block;margin-bottom:5px;}
+.cl{font-size:12px;font-weight:800;color:var(--g2);line-height:1.3;}
+.stabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.stb{background:var(--card);border:2px solid var(--border);border-radius:13px;padding:11px 6px;text-align:center;cursor:pointer;transition:all .15s;}
+.stb.on{background:var(--gbg);border-color:var(--g3);}
+.stb:active{transform:scale(0.93);}
+.ste{font-size:22px;display:block;margin-bottom:4px;}
+.stl{font-size:11px;font-weight:800;color:var(--g2);white-space:pre-line;line-height:1.3;}
+.wxs{background:linear-gradient(135deg,var(--bbg),#F0F8FF);border-radius:14px;padding:13px 15px;border:1.5px solid var(--bbd);display:flex;align-items:center;gap:10px;}
+.loc-btn{background:var(--card);color:var(--blu);border:1.5px solid var(--bbd);border-radius:14px;padding:14px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s;}
+.loc-btn:active{background:var(--bbg);}
+
+/* WEATHER */
+.wh{background:linear-gradient(148deg,#0A2472,#0D47A1,#1976D2);border-radius:22px;padding:26px 20px;text-align:center;color:#fff;box-shadow:0 8px 28px rgba(13,71,161,0.28);position:relative;overflow:hidden;}
+.wh::after{content:'☁️';position:absolute;right:-8px;bottom:-8px;font-size:90px;opacity:.07;pointer-events:none;}
+.we{font-size:58px;display:block;margin-bottom:5px;}
+.wt{font-size:62px;font-weight:900;letter-spacing:-3px;line-height:1;}
+.wc{font-size:15px;font-weight:700;opacity:.85;margin-top:5px;}
+.wloc{font-size:12px;opacity:.5;margin-top:4px;font-weight:600;}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ws{background:var(--card);border-radius:14px;padding:14px;border:1.5px solid var(--border);}
+.wsl{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.8px;}
+.wsv{font-size:24px;font-weight:900;color:var(--blu);margin-top:4px;line-height:1;}
+.wsu{font-size:11px;font-weight:700;color:var(--muted);margin-top:2px;}
+.wadv{background:linear-gradient(135deg,var(--bbg),#EFF8FF);border-radius:16px;padding:16px;border:1.5px solid var(--bbd);}
+.frow{display:flex;gap:8px;overflow-x:auto;padding:4px 0;-webkit-overflow-scrolling:touch;}
+.fd{background:var(--card);border-radius:14px;padding:12px 10px;min-width:72px;text-align:center;border:1.5px solid var(--border);flex-shrink:0;}
+.fdd{font-size:10px;font-weight:800;color:var(--muted);}
+.fde{font-size:24px;margin:6px 0;}
+.fdh{font-size:14px;font-weight:900;}
+.fdl{font-size:11px;font-weight:700;color:var(--muted);}
+
+/* MANDI */
+.mf{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.api-box{background:var(--bbg);border:1.5px solid var(--bbd);border-radius:15px;padding:13px 15px;}
+.api-link{color:var(--blu);font-weight:800;text-decoration:underline;cursor:pointer;}
+.api-inp{background:var(--card);border:1.5px solid var(--bbd);border-radius:12px;padding:12px 14px;width:100%;font-size:13px;font-family:'Nunito',sans-serif;color:var(--text);outline:none;font-weight:700;margin-top:10px;}
+.api-inp:focus{border-color:var(--blu);}
+.mc{background:var(--card);border-radius:var(--r);overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow);animation:popUp .3s ease both;}
+.mct{background:linear-gradient(135deg,#BF360C,var(--amb));padding:14px 17px;display:flex;justify-content:space-between;align-items:flex-start;}
+.mcr{padding:4px 0;}
+.mcrw{display:flex;justify-content:space-between;align-items:center;padding:12px 17px;border-bottom:1px solid var(--border);}
+.mcrw:last-child{border-bottom:none;}
+.dp{background:var(--abg);color:var(--amb);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;border:1px solid var(--abd);}
+.tu{color:#1B5E20;font-weight:800;}.td{color:var(--red);font-weight:800;}.ts{color:var(--amb);font-weight:800;}
+.lt{background:#E8F5E9;color:#1B5E20;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;border:1px solid #A5D6A7;}
+.dt{background:var(--abg);color:var(--amb);padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;border:1px solid var(--abd);}
+
+/* DOCTOR */
+.uz{background:var(--card);border:2.5px dashed rgba(0,105,92,.22);border-radius:var(--r);padding:36px 20px;text-align:center;cursor:pointer;transition:all .18s;display:block;}
+.uz.has{background:var(--tbg);border-style:solid;border-color:var(--tel);}
+.uz:active{background:var(--tbg);}
+.uzem{font-size:46px;display:block;margin-bottom:12px;}
+.uzt{font-size:15px;font-weight:800;color:var(--tel);}
+.uzs{font-size:12px;color:var(--muted);margin-top:4px;font-weight:600;}
+.prev{width:100%;border-radius:12px;max-height:180px;object-fit:cover;margin-top:14px;display:none;}
+.hr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.hc{background:var(--tbg);border-radius:12px;padding:10px 6px;text-align:center;font-size:11px;font-weight:800;color:var(--tel);line-height:1.4;}
+.dr{display:none;background:var(--card);border-radius:var(--r);padding:20px;border:2px solid var(--tbd);box-shadow:var(--shadow);animation:popUp .3s ease both;}
+.dr.on{display:block;}
+.dn{font-size:19px;font-weight:900;color:var(--tel);}
+.cfr{display:flex;align-items:center;gap:10px;margin:10px 0;}
+.cfl{font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap;}
+.cfb{flex:1;background:#E0E0E0;border-radius:99px;height:7px;}
+.cff{background:var(--tel);border-radius:99px;height:7px;transition:width .9s ease;}
+.cfp{font-size:13px;font-weight:900;color:var(--tel);}
+.dsl{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1.2px;margin:14px 0 6px;}
+.dst{font-size:13.5px;color:var(--text);line-height:1.65;font-weight:600;}
+
+/* SOIL */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ctile{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:13px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.ctile.on{background:var(--gbg);border-color:var(--g2);}
+.ctile:active{transform:scale(0.92);}
+.stile{background:var(--card);border:2px solid var(--border);border-radius:13px;padding:11px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.stile.on{background:var(--gbg);border-color:var(--g2);}
+.stile:active{transform:scale(0.93);}
+.sbn{background:var(--card);border:2px solid var(--border);border-radius:15px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;}
+.sbn.on{background:var(--brnbg);border-color:var(--brn);}
+.sbn:active{transform:scale(0.93);}
+.sbe{font-size:26px;display:block;margin-bottom:6px;}
+.sbl{font-size:12px;font-weight:800;color:var(--brn);}
+.sres{display:none;background:linear-gradient(135deg,var(--brnbg),#FFF8F5);border-radius:var(--r);padding:20px;border:1.5px solid var(--brnbd);animation:popUp .3s ease both;}
+.sres.on{display:block;}
+.nr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.nb{background:#fff;border-radius:12px;padding:12px 8px;text-align:center;border:1px solid var(--brnbd);}
+.nl{font-size:10px;font-weight:800;color:var(--muted);}
+.nv{font-size:22px;font-weight:900;color:var(--brn);line-height:1.2;margin-top:2px;}
+.nu{font-size:10px;font-weight:700;color:var(--muted);margin-top:1px;}
+
+/* JOURNAL */
+.je{background:var(--card);border-radius:16px;border:1.5px solid var(--border);padding:16px;box-shadow:var(--shadow);animation:popUp .3s ease both;}
+.je-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.je-crop{font-size:14px;font-weight:800;color:var(--g2);}
+.je-date{font-size:11px;color:var(--muted);font-weight:600;}
+.je-note{font-size:13px;color:var(--text);margin-top:8px;line-height:1.6;font-weight:600;}
+.je-del{background:none;border:none;color:var(--red);cursor:pointer;font-size:18px;padding:2px 6px;}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+
+/* SETTINGS */
+.ah{background:linear-gradient(148deg,var(--g1),var(--g2),var(--g3));border-radius:22px;padding:24px 20px;text-align:center;color:#fff;}
+.ahn{font-size:26px;font-weight:900;}
+.ahv{font-size:11px;opacity:.44;font-weight:700;margin-top:3px;}
+.ahd{font-size:13px;opacity:.7;margin-top:12px;line-height:1.6;font-weight:600;}
+.aht{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;}
+.ahtag{background:rgba(255,255,255,.18);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:800;}
+.sg2{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden;}
+.si{display:flex;align-items:center;gap:13px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.si:last-child{border-bottom:none;}.si:active{background:var(--bg);}
+.sii{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.ig{background:var(--gbg);}.ib{background:var(--bbg);}.ia{background:var(--abg);}.it{background:var(--tbg);}.ir{background:var(--rbg);}
+.sit{flex:1;}.sil{font-size:14px;font-weight:800;}.sis{font-size:12px;color:var(--muted);margin-top:2px;font-weight:600;}
+.share-box{background:linear-gradient(135deg,var(--gbg),#F0FFF0);border-radius:20px;padding:18px;border:1.5px solid var(--gbd);text-align:center;}
+.qr-box{width:160px;height:160px;background:#fff;border-radius:14px;margin:12px auto;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.qr-box img{width:100%;height:100%;border-radius:12px;}
+.surl{background:var(--card);border-radius:11px;padding:10px 14px;font-size:11px;font-weight:700;color:var(--g2);border:1.5px solid var(--gbd);word-break:break-all;text-align:left;margin:8px 0;}
+.sbr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.sb{border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .15s;}
+.sb:active{transform:scale(0.95);}
+.sb.wa{background:#25D366;color:#fff;}
+.sb.cp{background:var(--card);color:var(--g2);border:1.5px solid var(--gbd);}
+.inst-card{background:linear-gradient(135deg,#4A148C,#7B1FA2);border-radius:18px;padding:17px;color:#fff;}
+.inst-btn{margin-top:12px;background:#fff;color:#7B1FA2;border:none;border-radius:12px;padding:11px 18px;font-size:13px;font-weight:900;font-family:'Nunito',sans-serif;cursor:pointer;}
+.inst-btn:active{transform:scale(0.95);}
+
+/* IVR SCREEN */
+#ivr-screen{background:linear-gradient(158deg,#0A1530,#0D2B56 40%,#0D47A1 80%,var(--blu));overflow-y:auto;}
+.ivr-hdr{padding:54px 22px 24px;color:#fff;text-align:center;position:relative;}
+.ivr-back{position:absolute;top:50px;left:16px;width:38px;height:38px;background:rgba(255,255,255,.1);border:none;border-radius:12px;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.ivr-hero{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:24px;padding:26px 20px;text-align:center;margin-bottom:16px;}
+.ivr-ic{font-size:54px;display:block;margin-bottom:12px;animation:ring 2s ease-in-out infinite;}
+@keyframes ring{0%,100%{transform:rotate(0)}10%{transform:rotate(-10deg)}20%{transform:rotate(10deg)}30%{transform:rotate(-8deg)}40%{transform:rotate(8deg)}50%{transform:rotate(0)}}
+.ivr-num{font-size:36px;font-weight:900;color:#fff;letter-spacing:2px;}
+.ivr-body{padding:0 18px 48px;}
+.ivr-items{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.ivr-item{background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.14);border-radius:18px;padding:15px 17px;display:flex;align-items:center;gap:13px;}
+.ivr-nb{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.28);font-size:20px;font-weight:900;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ivr-box{background:rgba(255,255,255,.07);border-radius:16px;padding:14px;margin-bottom:12px;}
+.ivr-bt{font-size:10px;font-weight:800;color:rgba(255,255,255,.36);letter-spacing:1.5px;margin-bottom:10px;}
+.ivr-lg{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ivr-lc{background:rgba(255,255,255,.1);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px;}
+.ivr-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;}
+.ivr-step:last-child{margin-bottom:0;}
+.ivr-sn{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.ivr-st{font-size:12px;color:rgba(255,255,255,.64);font-weight:600;line-height:1.5;}
+
+/* MODAL */
+.mover{display:none;position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:300;align-items:flex-end;backdrop-filter:blur(8px);}
+.mover.on{display:flex;}
+.msh{background:#fff;border-radius:28px 28px 0 0;padding:20px 20px 48px;width:100%;animation:shUp .3s ease both;}
+@keyframes shUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mhd{width:36px;height:4px;background:#E0E0E0;border-radius:99px;margin:0 auto 18px;}
+.mt{font-size:18px;font-weight:900;margin-bottom:14px;}
+.mo{display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:14px;cursor:pointer;transition:background .15s;margin-bottom:6px;}
+.mo:active,.mo.on{background:var(--gbg);}
+.mf2{font-size:26px;}.mn{font-size:15px;font-weight:800;}.mnat{font-size:12px;color:var(--muted);margin-top:1px;font-weight:600;}
+.mck{margin-left:auto;color:var(--g2);font-size:20px;font-weight:900;opacity:0;}
+.mo.on .mck{opacity:1;}
+.mdn{background:var(--gbg);color:var(--g2);border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:900;font-family:'Nunito',sans-serif;cursor:pointer;width:100%;margin-top:8px;}
+
+/* SNACK */
+.snack{position:fixed;bottom:74px;left:50%;transform:translateX(-50%) translateY(14px);background:rgba(11,51,24,.93);backdrop-filter:blur(10px);color:#fff;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;opacity:0;transition:all .25s;z-index:400;white-space:nowrap;pointer-events:none;max-width:90%;}
+.snack.on{opacity:1;transform:translateX(-50%) translateY(0);}
+input[type=file]{display:none;}
+</style>
+</head>
+<body>
+
+<!-- LANG -->
+<div id="lang-screen" class="screen on">
+  <div class="lh">
+    <div class="lh-orb">🌱</div>
+    <div class="lh-title">Agri<em>Sathi</em></div>
+    <div class="lh-sub">AI Farmer Assistant • AI किसान सहायक</div>
+  </div>
+  <div class="lb">
+    <div class="ll">CHOOSE YOUR LANGUAGE</div>
+    <div class="lg">
+      <div class="lc" onclick="pickLang('en','English',this)"><div class="lc-ck">✓</div><span class="lc-f">🇮🇳</span><div class="lc-n">English</div><div class="lc-s">Indian English</div></div>
+      <div class="lc" onclick="pickLang('hi','हिंदी',this)"><div class="lc-ck">✓</div><span class="lc-f">🌾</span><div class="lc-n">Hindi</div><div class="lc-s">हिंदी</div></div>
+      <div class="lc" onclick="pickLang('ta','தமிழ்',this)"><div class="lc-ck">✓</div><span class="lc-f">☀️</span><div class="lc-n">Tamil</div><div class="lc-s">தமிழ்</div></div>
+      <div class="lc" onclick="pickLang('pa','ਪੰਜਾਬੀ',this)"><div class="lc-ck">✓</div><span class="lc-f">🌻</span><div class="lc-n">Punjabi</div><div class="lc-s">ਪੰਜਾਬੀ</div></div>
+    </div>
+    <button class="lgo" id="lgo" onclick="startApp()"><span id="lgo-txt">Select a language</span> →</button>
+  </div>
+</div>
+
+<!-- IVR SCREEN -->
+<div id="ivr-screen" class="screen">
+  <div class="ivr-hdr">
+    <button class="ivr-back" onclick="closeIVR()">←</button>
+    <div style="font-size:26px;font-weight:900;color:#fff;" id="iv-title">📞 IVR Helpline</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.6);margin-top:4px;font-weight:600;" id="iv-sub">For button phone farmers</div>
+  </div>
+  <div class="ivr-body">
+    <div class="ivr-hero">
+      <span class="ivr-ic">📞</span>
+      <div class="ivr-num">1800-XXX-XXXX</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.42);margin-top:3px;font-weight:700;letter-spacing:1px;" id="iv-free">TOLL-FREE • 24/7 • ALL INDIA</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.63);margin-top:10px;line-height:1.55;font-weight:600;" id="iv-desc">Call from any phone. No internet needed. Auto language detection.</div>
+    </div>
+    <div style="font-size:10px;font-weight:800;color:rgba(255,255,255,.35);letter-spacing:2px;margin-bottom:10px;" id="iv-press">PRESS WHEN PROMPTED</div>
+    <div class="ivr-items">
+      <div class="ivr-item"><div class="ivr-nb">1</div><div><div style="font-size:15px;font-weight:800;color:#fff;">🏪 <span id="iv-m1">Mandi Prices</span></div><div style="font-size:12px;color:rgba(255,255,255,.48);margin-top:2px;font-weight:600;">मंडी • சந்தை • ਮੰਡੀ</div></div></div>
+      <div class="ivr-item"><div class="ivr-nb">2</div><div><div style="font-size:15px;font-weight:800;color:#fff;">🌤️ <span id="iv-m2">Weather</span></div><div style="font-size:12px;color:rgba(255,255,255,.48);margin-top:2px;font-weight:600;">मौसम • வானிலை • ਮੌਸਮ</div></div></div>
+      <div class="ivr-item"><div class="ivr-nb">3</div><div><div style="font-size:15px;font-weight:800;color:#fff;">💡 <span id="iv-m3">Crop Advisory</span></div><div style="font-size:12px;color:rgba(255,255,255,.48);margin-top:2px;font-weight:600;">फसल सलाह • ஆலோசனை • ਸਲਾਹ</div></div></div>
+      <div class="ivr-item"><div class="ivr-nb">4</div><div><div style="font-size:15px;font-weight:800;color:#fff;">🔬 <span id="iv-m4">Disease Help</span></div><div style="font-size:12px;color:rgba(255,255,255,.48);margin-top:2px;font-weight:600;">रोग जानकारी • நோய் • ਰੋਗ</div></div></div>
+      <div class="ivr-item"><div class="ivr-nb">0</div><div><div style="font-size:15px;font-weight:800;color:#fff;">👨‍🌾 <span id="iv-m5">Talk to Expert</span></div></div></div>
+    </div>
+    <div class="ivr-box">
+      <div class="ivr-bt" id="iv-hw">HOW IT WORKS</div>
+      <div class="ivr-step"><div class="ivr-sn">1</div><div class="ivr-st" id="iv-s1">Call free from any phone</div></div>
+      <div class="ivr-step"><div class="ivr-sn">2</div><div class="ivr-st" id="iv-s2">System greets in 4 languages</div></div>
+      <div class="ivr-step"><div class="ivr-sn">3</div><div class="ivr-st" id="iv-s3">Press 1-4 for the service you need</div></div>
+      <div class="ivr-step"><div class="ivr-sn">4</div><div class="ivr-st" id="iv-s4">Say your district — get live data</div></div>
+    </div>
+    <div class="ivr-box">
+      <div class="ivr-bt" id="iv-ld">AUTO LANGUAGE DETECTION</div>
+      <div class="ivr-lg">
+        <div class="ivr-lc"><span style="font-size:18px;">🇮🇳</span><div><div style="font-size:13px;font-weight:800;color:#fff;">English</div><div style="font-size:10px;color:rgba(255,255,255,.44);font-weight:700;" id="iv-auto">Auto-detected</div></div></div>
+        <div class="ivr-lc"><span style="font-size:18px;">🌾</span><div><div style="font-size:13px;font-weight:800;color:#fff;">हिंदी</div><div style="font-size:10px;color:rgba(255,255,255,.44);font-weight:700;" id="iv-auto2">Auto-detected</div></div></div>
+        <div class="ivr-lc"><span style="font-size:18px;">☀️</span><div><div style="font-size:13px;font-weight:800;color:#fff;">தமிழ்</div><div style="font-size:10px;color:rgba(255,255,255,.44);font-weight:700;" id="iv-auto3">Auto-detected</div></div></div>
+        <div class="ivr-lc"><span style="font-size:18px;">🌻</span><div><div style="font-size:13px;font-weight:800;color:#fff;">ਪੰਜਾਬੀ</div><div style="font-size:10px;color:rgba(255,255,255,.44);font-weight:700;" id="iv-auto4">Auto-detected</div></div></div>
+      </div>
+    </div>
+    <button class="btn b" onclick="closeIVR()">← <span id="iv-back">Back to App</span></button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="screen">
+
+  <!-- HOME -->
+  <div class="pane on" id="p-home">
+    <div class="hdr G"><div class="orb a"></div><div class="orb b"></div>
+      <div class="hb" id="h-greet">GOOD MORNING, FARMER 👋</div>
+      <div class="ht">AgriSathi 🌱</div>
+      <div class="hs" id="h-date"></div>
+    </div>
+    <div class="hb2">
+      <div class="vc">
+        <div class="vcb" id="vc-badge">🎙️ VOICE ASSISTANT</div>
+        <button class="vcm" id="voice-btn" onclick="voicePress()">
+          <div class="vci" id="mic-circle">🎙️</div>
+          <div class="vct">
+            <div class="vct1" id="vc-t1">Tap to Speak</div>
+            <div class="vct2" id="vc-t2">Ask about crops, weather, prices...</div>
+          </div>
+        </button>
+        <div class="vch" id="vc-hint">👆 Tap and speak in your language</div>
+      </div>
+      <div class="ivrs" onclick="openIVR()">
+        <div class="ivrs-ph">📞</div>
+        <div class="ivrs-tx">
+          <div style="font-size:9px;font-weight:800;color:rgba(255,255,255,.45);letter-spacing:1.5px;" id="ivr-top">BUTTON PHONE • IVR HELPLINE</div>
+          <div style="font-size:16px;font-weight:900;margin-top:1px;" id="ivr-title-h">Call AgriSathi</div>
+          <div style="font-size:20px;font-weight:900;color:#90CAF9;letter-spacing:1px;margin-top:2px;">1800-XXX-XXXX</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:1px;font-weight:600;" id="ivr-sub-h">Toll-free • All languages • No internet</div>
+        </div>
+        <div style="color:rgba(255,255,255,.48);font-size:20px;">›</div>
+      </div>
+      <div class="sr">
+        <div class="sc" onclick="goTab('weather')"><div style="font-size:22px;margin-bottom:5px;">🌤️</div><div style="font-size:21px;font-weight:900;line-height:1;" id="dash-t">--°C</div><div style="font-size:11px;color:var(--muted);margin-top:4px;font-weight:700;" id="h-wx">Tap: Live Weather</div></div>
+        <div class="sc" onclick="goTab('mandi')"><div style="font-size:22px;margin-bottom:5px;">📊</div><div style="font-size:21px;font-weight:900;line-height:1;" id="h-live">Live</div><div style="font-size:11px;color:var(--muted);margin-top:4px;font-weight:700;" id="h-man">Mandi Prices</div></div>
+      </div>
+      <div>
+        <div class="sh" style="margin-bottom:12px;" id="h-tools">Quick Tools</div>
+        <div class="tg">
+          <div class="tb" onclick="goTab('advisory')"><span class="te">💡</span><div class="tl" id="t-adv">Advisory</div></div>
+          <div class="tb" onclick="goTab('doctor')"><span class="te">🔬</span><div class="tl" id="t-doc">Crop Doctor</div></div>
+          <div class="tb" onclick="goTab('weather')"><span class="te">🌤️</span><div class="tl" id="t-wea">Weather</div></div>
+          <div class="tb" onclick="goTab('mandi')"><span class="te">🏪</span><div class="tl" id="t-man">Mandi</div></div>
+          <div class="tb" onclick="goTab('soil')"><span class="te">🌱</span><div class="tl" id="t-soi">Soil</div></div>
+          <div class="tb" onclick="goTab('journal')"><span class="te">📒</span><div class="tl" id="t-jrn">Journal</div></div>
+        </div>
+      </div>
+      <div class="tip"><div class="te2">💡</div><div><div style="font-size:10px;font-weight:800;color:var(--amb);letter-spacing:1.2px;" id="tip-l">TODAY'S TIP</div><div style="font-size:13px;color:var(--text);margin-top:4px;line-height:1.65;font-weight:600;" id="tip-t">Water crops early morning to reduce evaporation and fungal diseases.</div></div></div>
+      <div style="height:4px;"></div>
+    </div>
+  </div>
+
+  <!-- ADVISORY -->
+  <div class="pane" id="p-advisory">
+    <div class="hdr G"><div class="orb a"></div><div class="orb b"></div>
+      <div class="hb" id="adv-badge">AI-POWERED</div>
+      <div class="ht" id="adv-title">💡 Crop Advisory</div>
+      <div class="hs" id="adv-sub">Based on crop + season + weather</div>
+    </div>
+    <div class="scroll"><div class="stack">
+      <div>
+        <div class="sh" style="margin-bottom:10px;" id="adv-cl">Choose Your Crop</div>
+        <div class="cgrid" id="crop-grid"></div>
+      </div>
+      <div>
+        <div class="sh" style="margin-bottom:10px;" id="adv-sl">Season</div>
+        <div class="stabs" id="season-tabs"></div>
+      </div>
+      <div class="fld"><div class="fl" id="adv-pl">YOUR PROBLEM</div><textarea id="txt-issue" rows="3"></textarea></div>
+      <div class="wxs">
+        <div style="font-size:26px;flex-shrink:0;" id="wx-em">🌡️</div>
+        <div style="flex:1;">
+          <div style="font-size:10px;font-weight:800;color:var(--blu);letter-spacing:1px;" id="wx-l">WEATHER FOR ADVISORY</div>
+          <div style="font-size:13px;font-weight:700;color:var(--muted);font-style:italic;margin-top:3px;" id="wx-v">Tap below to load weather</div>
+        </div>
+      </div>
+      <button class="loc-btn" onclick="getWxForAdv()" id="adv-loc-btn">📍 <span id="adv-loc">Use My Location for Weather Advisory</span></button>
+      <button class="btn g" id="adv-btn" onclick="doAdv()">💡 <span id="adv-btn-t">Get Advisory</span></button>
+      <div class="rbox" id="adv-out"><div class="rl" id="adv-rl">📋 ADVISORY RESULT</div><div class="rt" id="adv-txt"></div></div>
+    </div></div>
+  </div>
+
+  <!-- WEATHER -->
+  <div class="pane" id="p-weather">
+    <div class="hdr B"><div class="orb a"></div><div class="orb b"></div>
+      <div class="hb" id="wx-badge">REAL-TIME</div>
+      <div class="ht" id="wx-title">🌤️ Weather</div>
+      <div class="hs" id="wx-sub">Live conditions for your farm</div>
+    </div>
+    <div class="scroll"><div class="stack">
+      <button class="loc-btn" onclick="getWeather()">📍 <span id="wx-btn">Use My Location for Live Weather</span></button>
+      <div id="wx-load" class="hidden" style="text-align:center;padding:50px 20px;color:var(--muted);"><div style="font-size:50px;margin-bottom:12px;">🌍</div><div style="font-size:14px;font-weight:700;margin-bottom:14px;" id="wx-loading">Fetching weather...</div><div class="dots" style="color:var(--blu);justify-content:center;display:flex;"><i></i><i></i><i></i></div></div>
+      <div id="wx-content" class="hidden" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="wh"><span class="we" id="w-em">⛅</span><div class="wt" id="w-temp">--°</div><div class="wc" id="w-cond">--</div><div class="wloc" id="w-loc">📍 --</div></div>
+        <div class="wgrid">
+          <div class="ws"><div class="wsl" id="w-hl">💧 HUMIDITY</div><div class="wsv" id="w-hum">--</div><div class="wsu" id="w-pct">percent</div></div>
+          <div class="ws"><div class="wsl" id="w-wl">💨 WIND</div><div class="wsv" id="w-wind">--</div><div class="wsu">km/h</div></div>
+          <div class="ws"><div class="wsl" id="w-fl">🌡️ FEELS LIKE</div><div class="wsv" id="w-feel">--</div><div class="wsu">°C</div></div>
+          <div class="ws"><div class="wsl" id="w-rl">🌧️ RAINFALL</div><div class="wsv" id="w-rain">--</div><div class="wsu">mm/h</div></div>
+        </div>
+        <div class="wadv"><div style="font-size:10px;font-weight:800;color:var(--blu);letter-spacing:1.2px;" id="w-al">🌾 FARMING ADVISORY</div><div style="font-size:13.5px;color:var(--text);margin-top:8px;line-height:1.65;font-weight:600;" id="w-adv">--</div></div>
+        <div><div class="sh" style="margin-bottom:10px;" id="fc-l">5-Day Forecast</div><div class="frow" id="frow"></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- MANDI -->
+  <div class="pane" id="p-mandi">
+    <div class="hdr A"><div class="orb a"></div><div class="orb b"></div>
+      <div class="hb" id="man-badge">DISTRICT-WISE LIVE</div>
+      <div class="ht" id="man-title">🏪 Mandi Prices</div>
+      <div class="hs" id="man-sub">data.gov.in · Agmarknet Official</div>
+    </div>
+    <div class="scroll"><div class="stack">
+      <div class="api-box">
+        <div style="font-size:11px;font-weight:800;color:var(--blu);margin-bottom:5px;" id="api-l">🔑 FREE API — data.gov.in</div>
+        <div style="font-size:12px;color:#1A3A6A;line-height:1.55;font-weight:600;" id="api-t">Register free at <span class="api-link" onclick="toast('Visit: data.gov.in → Register → API Key')">data.gov.in</span> for live data. Without key, demo prices shown.</div>
+        <input type="text" class="api-inp" id="api-key" oninput="saveKey(this.value)" placeholder="Paste API key here...">
+      </div>
+      <div class="mf">
+        <div class="fld"><div class="fl" id="state-l">STATE</div><select id="man-state" onchange="buildDists()"></select></div>
+        <div class="fld"><div class="fl" id="dist-l">DISTRICT</div><select id="man-dist"></select></div>
+      </div>
+      <div class="fld"><div class="fl" id="comm-l">COMMODITY</div><select id="man-crop"></select></div>
+      <button class="btn a" onclick="doMandi()">🏪 <span id="man-btn">Get District Prices</span></button>
+      <div id="mandi-out"></div>
+    </div></div>
+  </div>
+
+  <!-- DOCTOR -->
+  <div class="pane" id="p-doctor">
+    <div class="hdr T"><div class="orb a"></div><div class="orb b"></div>
+      <div class="hb" id="doc-badge">AI DETECTION</div>
+      <div class="ht" id="doc-title">🔬 Crop Doctor</div>
+      <div class="hs" id="doc-sub">Upload photo to diagnose</div>
+    </div>
+    <div class="scroll"><div class="stack">
+      <label class="uz" for="inp-img" id="uz-lbl">
+        <span class="uzem">📸</span>
+        <div class="uzt" id="uz-t">Upload Crop Photo</div>
+        <div class="uzs" id="uz-s">Take a close-up of the affected leaf</div>
+        <img id="img-prev" class="prev" alt="">
+      </label>
+      <input type="file" id="inp-img" accept="image/*" capture="environment" onchange="imgPicked(this)">
+      <div class="hr">
+        <div class="hc">☀️<br><span id="h-light">Good Light</span></div>
+        <div class="hc">🔍<br><span id="h-focus">Sharp Focus</span></div>
+        <div class="hc">🌿<br><span id="h-close">Close-Up</span></div>
+      </div>
+      <button class="btn t" id="ana-btn" onclick="doAnalyze()" disabled>🔬 <span id="ana-t">Analyze Image</span></button>
+      <div class="dr" id="dis-out">
+        <div class="dn" id="dis-nm"></div>
+        <div class="cfr"><div class="cfl" id="conf-l">Confidence</div><div class="cfb"><div class="cff" id="cff" style="width:0%"></div></div><div class="cfp" id="cfp"></div></div>
+        <div class="dsl" id="treat-l">💊 TREATMENT</div><div class="dst" id="ds-trt"></div>
+        <div class="dsl">📅 DOSAGE SCHEDULE</div><div class="dst" id="ds-dos"></div>
+        <div class="dsl" id="prev-l">🛡️ PREVENTION</div><div class="dst" id="ds-prv"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- SOIL -->
+  <div class="pane" id="p-soil">
+    <div class="hdr W"><div class="orb a"></div><div class="orb b"></div>
+      <div class="hb" id="soil-badge">NPK ANALYSIS</div>
+      <div class="ht" id="soil-title">🌱 Soil Advisor</div>
+      <div class="hs" id="soil-sub">Fertilizer recommendations</div>
+    </div>
+    <div class="scroll"><div class="stack">
+      <div>
+        <div class="sh" style="margin-bottom:10px;" id="soil-type-l">Select Soil Type</div>
+        <div class="sg">
+          <div class="sbn on" id="sb-sandy" onclick="setSoil('sandy',this)"><span class="sbe">🏜️</span><div class="sbl" id="sandy-l">Sandy</div></div>
+          <div class="sbn" id="sb-loamy" onclick="setSoil('loamy',this)"><span class="sbe">🌍</span><div class="sbl" id="loamy-l">Loamy</div></div>
+          <div class="sbn" id="sb-clayey" onclick="setSoil('clayey',this)"><span class="sbe">🧱</span><div class="sbl" id="clayey-l">Clayey</div></div>
+          <div class="sbn" id="sb-black" onclick="setSoil('black',this)"><span class="sbe">⬛</span><div class="sbl" id="black-l">Black Soil</div></div>
+        </div>
+      </div>
+      <div class="fld"><div class="fl" id="sym-l">PLANT SYMPTOM</div><select id="sel-sym"></select></div>
+      <div class="fld"><div class="fl" id="stage-l">GROWTH STAGE</div><select id="sel-stage"></select></div>
+      <button class="btn w" onclick="doSoil()">🌱 <span id="soil-btn">Get Recommendation</span></button>
+      <div class="sres" id="soil-out">
+        <div class="nr">
+          <div class="nb"><div class="nl" id="n-l">NITROGEN</div><div class="nv" id="s-n">--</div><div class="nu">kg/ha</div></div>
+          <div class="nb"><div class="nl" id="p-l">PHOSPHORUS</div><div class="nv" id="s-p">--</div><div class="nu">kg/ha</div></div>
+          <div class="nb"><div class="nl" id="k-l">POTASSIUM</div><div class="nv" id="s-k">--</div><div class="nu">kg/ha</div></div>
+        </div>
+        <div style="font-size:13.5px;color:var(--text);line-height:1.72;font-weight:600;" id="soil-txt"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- JOURNAL -->
+  <div class="pane" id="p-journal">
+    <div class="hdr G"><div class="orb a"></div><div class="orb b"></div>
+      <div class="hb" id="jrn-badge">FARM RECORDS</div>
+      <div class="ht" id="jrn-title">📒 Farm Journal</div>
+      <div class="hs" id="jrn-sub">Track your crop activities</div>
+    </div>
+    <div class="scroll"><div class="stack">
+      <div style="background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:16px;">
+        <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1.2px;margin-bottom:10px;" id="jrn-add">ADD ENTRY</div>
+        <select id="jrn-crop" style="width:100%;padding:8px 0;font-size:15px;font-family:'Nunito',sans-serif;font-weight:700;border:none;border-bottom:1.5px solid var(--border);outline:none;color:var(--text);background:transparent;-webkit-appearance:none;margin-bottom:10px;"></select>
+        <textarea id="jrn-note" rows="3" style="width:100%;padding:8px 0;font-size:14px;font-family:'Nunito',sans-serif;font-weight:600;border:none;border-top:1.5px solid var(--border);outline:none;color:var(--text);background:transparent;resize:none;line-height:1.6;margin-top:4px;"></textarea>
+        <button class="btn g" onclick="saveJournal()" style="margin-top:12px;">📒 <span id="jrn-btn">Save Entry</span></button>
+      </div>
+      <div id="jrn-list"></div>
+    </div></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="pane" id="p-settings">
+    <div class="hdr G"><div class="orb a"></div><div class="orb b"></div>
+      <div class="hb" id="set-badge">PREFERENCES</div>
+      <div class="ht" id="set-title">⚙️ Settings</div>
+      <div class="hs" id="set-sub">Customize AgriSathi</div>
+    </div>
+    <div class="scroll"><div class="stack">
+      <div class="ah">
+        <span style="font-size:52px;display:block;margin-bottom:10px;">🌱</span>
+        <div class="ahn">AgriSathi</div>
+        <div class="ahv">v3.0 • PWA + Voice + IVR + AI</div>
+        <div class="ahd" id="about-d">AI farming companion. District mandi prices, live weather, crop advisory, disease detection, soil analysis & farm journal.</div>
+        <div class="aht"><span class="ahtag">English</span><span class="ahtag">हिंदी</span><span class="ahtag">தமிழ்</span><span class="ahtag">ਪੰਜਾਬੀ</span></div>
+      </div>
+
+      <!-- INSTALL CARD -->
+      <div class="inst-card" id="inst-card" style="display:none;">
+        <div style="font-size:15px;font-weight:900;" id="inst-t">📲 Install AgriSathi on your phone</div>
+        <div style="font-size:12px;opacity:.78;margin-top:5px;line-height:1.55;font-weight:600;" id="inst-s">Works offline! Add to home screen like an app.</div>
+        <button class="inst-btn" onclick="installApp()" id="inst-btn">📲 Install Now</button>
+      </div>
+
+      <!-- SHARE / QR -->
+      <div class="share-box">
+        <div style="font-size:15px;font-weight:900;color:var(--g1);" id="share-t">📲 Share AgriSathi</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;font-weight:600;" id="share-s">Share with other farmers</div>
+        <div class="qr-box" id="qr-box"><div class="dots" style="color:var(--g2);"><i></i><i></i><i></i></div></div>
+        <div class="surl" id="share-url"></div>
+        <div class="sbr">
+          <button class="sb wa" onclick="shareWA()">💬 <span id="wa-btn">WhatsApp</span></button>
+          <button class="sb cp" onclick="copyLink()">📋 <span id="cp-btn">Copy Link</span></button>
+        </div>
+      </div>
+
+      <div class="sg2">
+        <div class="si" onclick="openModal()"><div class="sii ig">🌐</div><div class="sit"><div class="sil" id="lang-l">Language</div><div class="sis" id="cur-lang">English</div></div><div style="color:var(--muted);font-size:18px;font-weight:800;">›</div></div>
+        <div class="si" onclick="openIVR()"><div class="sii ib">📞</div><div class="sit"><div class="sil" id="ivr-l">IVR Helpline</div><div class="sis">1800-XXX-XXXX</div></div><div style="color:var(--muted);font-size:18px;font-weight:800;">›</div></div>
+      </div>
+      <div class="sg2">
+        <div class="si"><div class="sii ib">🌤️</div><div class="sit"><div class="sil" id="wx-src">Weather Source</div><div class="sis">Open-Meteo — free</div></div></div>
+        <div class="si"><div class="sii ia">🏪</div><div class="sit"><div class="sil" id="man-src">Mandi Source</div><div class="sis">data.gov.in — Govt of India</div></div></div>
+        <div class="si" onclick="clearJournal()"><div class="sii ir">🗑️</div><div class="sit"><div class="sil" style="color:var(--red);" id="clr-l">Clear Journal</div><div class="sis" id="clr-s">Delete all farm entries</div></div><div style="color:var(--muted);font-size:18px;font-weight:800;">›</div></div>
+      </div>
+      <div style="height:6px;"></div>
+    </div></div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-bar">
+    <div class="ni on" id="n-home" onclick="goTab('home')"><div class="ni-i">🏠</div><div class="ni-l" id="nl-home">Home</div></div>
+    <div class="ni" id="n-advisory" onclick="goTab('advisory')"><div class="ni-i">💡</div><div class="ni-l" id="nl-adv">Advisory</div></div>
+    <div class="ni" id="n-doctor" onclick="goTab('doctor')"><div class="ni-i">🔬</div><div class="ni-l" id="nl-doc">Doctor</div></div>
+    <div class="ni" id="n-weather" onclick="goTab('weather')"><div class="ni-i">🌤️</div><div class="ni-l" id="nl-wea">Weather</div></div>
+    <div class="ni" id="n-mandi" onclick="goTab('mandi')"><div class="ni-i">🏪</div><div class="ni-l" id="nl-man">Mandi</div></div>
+  </div>
+</div>
+
+<!-- LANG MODAL -->
+<div class="mover" id="lang-modal" onclick="modalOut(event)">
+  <div class="msh">
+    <div class="mhd"></div>
+    <div class="mt" id="modal-t">🌐 Select Language</div>
+    <div class="mo on" id="mo-en" onclick="changeLang('en',this)"><span class="mf2">🇮🇳</span><div><div class="mn">English</div><div class="mnat">Indian English</div></div><div class="mck">✓</div></div>
+    <div class="mo" id="mo-hi" onclick="changeLang('hi',this)"><span class="mf2">🌾</span><div><div class="mn">Hindi</div><div class="mnat">हिंदी</div></div><div class="mck">✓</div></div>
+    <div class="mo" id="mo-ta" onclick="changeLang('ta',this)"><span class="mf2">☀️</span><div><div class="mn">Tamil</div><div class="mnat">தமிழ்</div></div><div class="mck">✓</div></div>
+    <div class="mo" id="mo-pa" onclick="changeLang('pa',this)"><span class="mf2">🌻</span><div><div class="mn">Punjabi</div><div class="mnat">ਪੰਜਾਬੀ</div></div><div class="mck">✓</div></div>
+    <button class="mdn" id="modal-done" onclick="closeModal()">Done</button>
+  </div>
+</div>
+<div class="snack" id="snack"></div>
+
+<script>
+
+// AgriSathi v3 — Complete JS
+var lang='en', curTab='home', soilType='sandy', selCrop='', selSeason='', deferredInstall=null;
+
+// ── TRANSLATIONS ──────────────────────────────────────────
+var T={
+en:{
+  gm:'GOOD MORNING',ga:'GOOD AFTERNOON',ge:'GOOD EVENING',farmer:'FARMER \uD83D\uDC4B',
+  home:'Home',adv:'Advisory',doc:'Doctor',wea:'Weather',man:'Mandi',
+  tools:'Quick Tools',tip_l:"TODAY'S TIP",
+  tip:'Water crops early morning to reduce evaporation and fungal diseases.',
+  adv_title:'\uD83D\uDCA1 Crop Advisory',adv_sub:'AI-powered recommendations',
+  adv_cl:'Choose Crop',adv_sl:'Season',adv_pl:'Describe your issue (optional)',
+  adv_btn:'Get Advisory',adv_rl:'\uD83D\uDCCB ADVISORY RESULT',
+  wx_title:'\uD83C\uDF24\uFE0F Weather',wx_btn:'Use My Location',wx_load:'Fetching weather...',
+  w_al:'\uD83C\uDF3E FARMING ADVISORY',w_hl:'\uD83D\uDCA7 HUMIDITY',w_wl:'\uD83D\uDCA8 WIND',
+  w_fl:'\uD83C\uDF21\uFE0F FEELS LIKE',w_rl:'\uD83C\uDF27\uFE0F RAIN',w_pct:'percent',
+  man_title:'\uD83C\uDFEA Mandi Prices',man_btn:'Get District Prices',
+  state_l:'STATE',dist_l:'DISTRICT',comm_l:'COMMODITY',
+  modal_p:'Modal Price',min_p:'Min Price',max_p:'Max Price',
+  market_l:'Market',trend_l:'Trend',
+  rising:'\uD83D\uDCC8 Rising',falling:'\uD83D\uDCC9 Falling',stable:'\u27A1\uFE0F Stable',
+  doc_title:'\uD83D\uDD2C Crop Doctor',doc_sub:'Upload photo to diagnose',
+  uz_t:'Upload Crop Photo',uz_s:'Take a clear close-up of affected leaf',
+  ana_t:'Analyze Image',ana_again:'Analyze Again',
+  conf_l:'Confidence',treat_l:'\uD83D\uDC8A TREATMENT',prev_l:'\uD83D\uDEE1\uFE0F PREVENTION',
+  h_light:'Good Light',h_focus:'Sharp Focus',h_close:'Close-Up',
+  soil_title:'\uD83C\uDF31 Soil Advisor',soil_sub:'NPK + fertilizer recommendations',
+  soil_type_l:'Select Soil Type',
+  sandy:'Sandy',loamy:'Loamy',clayey:'Clayey',black:'Black Soil',
+  sym_l:'PLANT SYMPTOM',stage_l:'GROWTH STAGE',soil_btn:'Get Recommendation',
+  n_l:'NITROGEN',p_l:'PHOSPHORUS',k_l:'POTASSIUM',
+  jrn_title:'\uD83D\uDCD2 Farm Journal',jrn_sub:'Track crop activities',
+  jrn_add:'ADD ENTRY',jrn_cl:'CROP',jrn_nl:'NOTE',jrn_btn:'Save Entry',
+  lang_l:'Language',cur_lang:'English',
+  share_t:'\uD83D\uDCF2 Share AgriSathi',share_s:'Share with fellow farmers',
+  wa_btn:'WhatsApp',cp_btn:'Copy Link',
+  inst_t:'\uD83D\uDCF2 Install AgriSathi',inst_s:'Add to home screen \u2014 works offline!',inst_btn:'Install Now',
+  clr_l:'Clear Journal',clr_s:'Delete all entries',
+  adv_done:'Advisory ready!',prices_done:'Prices loaded!',
+  ana_done:'Analysis complete!',rec_done:'Recommendation ready!',
+  lang_chg:'Language changed',link_copied:'Link copied!',
+  jrn_saved:'Entry saved!',jrn_cleared:'Journal cleared.',
+  loc_denied:'Location access denied',wx_fail:'Weather fetch failed.',
+  iv_sub:'For button phone farmers',iv_desc:'Call from any phone. No internet needed.',
+  iv_press:'SERVICES AVAILABLE',
+  iv_m1:'\uD83C\uDFEA Mandi Prices',iv_m2:'\uD83C\uDF24\uFE0F Weather Forecast',
+  iv_m3:'\uD83D\uDCA1 Crop Advisory',iv_m4:'\uD83D\uDD2C Disease Help',iv_m5:'\uD83D\uDC68\u200D\uD83C\uDF3E Talk to Expert',
+  iv_back:'Back to App',
+  crops:[
+    {v:'Wheat',l:'\uD83C\uDF3E Wheat'},{v:'Rice',l:'\uD83C\uDF3F Rice'},{v:'Maize',l:'\uD83C\uDF3D Maize'},
+    {v:'Cotton',l:'\u2601\uFE0F Cotton'},{v:'Sugarcane',l:'\uD83C\uDF8B Sugarcane'},{v:'Tomato',l:'\uD83C\uDF45 Tomato'},
+    {v:'Potato',l:'\uD83E\uDD54 Potato'},{v:'Onion',l:'\uD83E\uDDC5 Onion'},{v:'Soybean',l:'\uD83E\uDED8 Soybean'},
+    {v:'Groundnut',l:'\uD83E\uDD5C Groundnut'},{v:'Mustard',l:'\uD83C\uDF3B Mustard'},{v:'Pulses',l:'\uD83C\uDF31 Pulses'}
+  ],
+  seasons:[{v:'Kharif',l:'Kharif\nJun-Oct'},{v:'Rabi',l:'Rabi\nNov-Apr'},{v:'Zaid',l:'Zaid\nApr-Jun'}],
+  states:['Punjab','Haryana','Uttar Pradesh','Maharashtra','Madhya Pradesh','Rajasthan','Gujarat','Andhra Pradesh','Tamil Nadu','Karnataka','Bihar','West Bengal'],
+  districts:{
+    'Punjab':['Amritsar','Ludhiana','Jalandhar','Patiala','Bathinda','Firozpur','Gurdaspur','Hoshiarpur','Moga','Sangrur'],
+    'Haryana':['Ambala','Hisar','Karnal','Rohtak','Sonipat','Kurukshetra','Sirsa','Panipat','Yamunanagar','Bhiwani'],
+    'Uttar Pradesh':['Lucknow','Kanpur','Agra','Varanasi','Meerut','Mathura','Bareilly','Gorakhpur','Aligarh','Moradabad'],
+    'Maharashtra':['Pune','Nashik','Kolhapur','Aurangabad','Solapur','Nagpur','Satara','Sangli','Latur','Nanded'],
+    'Madhya Pradesh':['Bhopal','Indore','Jabalpur','Gwalior','Sagar','Dewas','Ujjain','Mandsaur','Ratlam','Hoshangabad'],
+    'Rajasthan':['Jaipur','Jodhpur','Ajmer','Kota','Bikaner','Udaipur','Alwar','Bharatpur','Sikar','Nagaur'],
+    'Gujarat':['Rajkot','Surat','Vadodara','Ahmedabad','Junagadh','Bhavnagar','Anand','Mehsana','Gandhinagar','Amreli'],
+    'Andhra Pradesh':['Guntur','Krishna','Kurnool','Nellore','Prakasam','East Godavari','West Godavari','Chittoor','Kadapa','Anantapur'],
+    'Tamil Nadu':['Coimbatore','Erode','Salem','Tirupur','Dindigul','Madurai','Thanjavur','Tirunelveli','Vellore','Kancheepuram'],
+    'Karnataka':['Davangere','Kolar','Tumkur','Hassan','Mysore','Belagavi','Hubli','Shivamogga','Mandya','Raichur'],
+    'Bihar':['Patna','Gaya','Bhagalpur','Muzaffarpur','Darbhanga','Purnia','Araria','Sitamarhi','Vaishali','Nalanda'],
+    'West Bengal':['Bardhaman','Murshidabad','Nadia','Hooghly','Midnapore','Bankura','Purulia','Malda','Cooch Behar','Jalpaiguri']
+  },
+  commodities:[
+    {v:'Wheat',l:'Wheat'},{v:'Rice',l:'Rice'},{v:'Maize',l:'Maize'},{v:'Cotton',l:'Cotton'},
+    {v:'Soybean',l:'Soybean'},{v:'Onion',l:'Onion'},{v:'Tomato',l:'Tomato'},{v:'Potato',l:'Potato'},
+    {v:'Mustard',l:'Mustard'},{v:'Groundnut',l:'Groundnut'},{v:'Sugarcane',l:'Sugarcane'},{v:'Chilli',l:'Chilli'}
+  ],
+  symptoms:[
+    {v:'none',l:'No symptoms'},{v:'yellow',l:'Yellow leaves (Nitrogen deficiency)'},
+    {v:'purple',l:'Purple leaves (Phosphorus deficiency)'},{v:'brown',l:'Brown tips (Potassium deficiency)'},
+    {v:'stunted',l:'Stunted / slow growth'}
+  ],
+  stages:['Seedling','Vegetative','Flowering','Fruiting / Grain Fill']
+},
+hi:{
+  gm:'\u0936\u0941\u092D \u092A\u094D\u0930\u092D\u093E\u0924',ga:'\u0928\u092E\u0938\u094D\u0915\u093E\u0930',ge:'\u0936\u0941\u092D \u0938\u0902\u0927\u094D\u092F\u093E',farmer:'\u0915\u093F\u0938\u093E\u0928 \uD83D\uDC4B',
+  home:'\u0939\u094B\u092E',adv:'\u0938\u0932\u093E\u0939',doc:'\u0921\u0949\u0915\u094D\u091F\u0930',wea:'\u092E\u094C\u0938\u092E',man:'\u092E\u0902\u0921\u0940',
+  tools:'\u0924\u094D\u0935\u0930\u093F\u0924 \u0909\u092A\u0915\u0930\u0923',tip_l:'\u0906\u091C \u0915\u0940 \u0938\u0932\u093E\u0939',
+  tip:'\u092B\u0938\u0932 \u0915\u094B \u0938\u0941\u092C\u0939 \u091C\u0932\u094D\u0926\u0940 \u092A\u093E\u0928\u0940 \u0926\u0947\u0902 \u2014 \u0935\u093E\u0937\u094D\u092A\u0940\u0915\u0930\u0923 \u0914\u0930 \u092B\u092B\u0942\u0902\u0926 \u0930\u094B\u0917 \u0915\u092E \u0939\u094B\u0917\u093E\u0964',
+  adv_title:'\uD83D\uDCA1 \u092B\u0938\u0932 \u0938\u0932\u093E\u0939',adv_sub:'AI \u0938\u093F\u092B\u093C\u093E\u0930\u093F\u0936\u0947\u0902',
+  adv_cl:'\u092B\u0938\u0932 \u091A\u0941\u0928\u0947\u0902',adv_sl:'\u092E\u094C\u0938\u092E',adv_pl:'\u0906\u092A\u0915\u0940 \u0938\u092E\u0938\u094D\u092F\u093E (\u0935\u0948\u0915\u0932\u094D\u092A\u093F\u0915)',
+  adv_btn:'\u0938\u0932\u093E\u0939 \u0932\u0947\u0902',adv_rl:'\uD83D\uDCCB \u0938\u0932\u093E\u0939 \u092A\u0930\u093F\u0923\u093E\u092E',
+  wx_title:'\uD83C\uDF24\uFE0F \u092E\u094C\u0938\u092E',wx_btn:'\u092E\u0947\u0930\u0940 \u0932\u094B\u0915\u0947\u0936\u0928 \u0909\u092A\u092F\u094B\u0917 \u0915\u0930\u0947\u0902',wx_load:'\u092E\u094C\u0938\u092E \u0921\u0947\u091F\u093E \u0932\u094B\u0921 \u0939\u094B \u0930\u0939\u093E \u0939\u0948...',
+  w_al:'\uD83C\uDF3E \u062E\u0947\u062A\u0940 \u0938\u0932\u093E\u0939',w_hl:'\uD83D\uDCA7 \u0928\u092E\u0940',w_wl:'\uD83D\uDCA8 \u0939\u0935\u093E',
+  w_fl:'\uD83C\uDF21\uFE0F \u0905\u0928\u0941\u092D\u0935',w_rl:'\uD83C\uDF27\uFE0F \u092C\u093E\u0930\u093F\u0936',w_pct:'\u092A\u094D\u0930\u0924\u093F\u0936\u0924',
+  man_title:'\uD83C\uDFEA \u092E\u0902\u0921\u0940 \u092D\u093E\u0935',man_btn:'\u092D\u093E\u0935 \u0926\u0947\u0916\u0947\u0902',
+  state_l:'\u0930\u093E\u091C\u094D\u092F',dist_l:'\u091C\u093F\u0932\u093E',comm_l:'\u092B\u0938\u0932',
+  modal_p:'\u092E\u0949\u0921\u0932 \u092D\u093E\u0935',min_p:'\u0928\u094D\u092F\u0942\u0928\u0924\u092E',max_p:'\u0905\u0927\u093F\u0915\u0924\u092E',
+  market_l:'\u092E\u0902\u0921\u0940',trend_l:'\u0930\u0941\u091D\u093E\u0928',
+  rising:'\uD83D\uDCC8 \u092C\u0922\u093C \u0930\u0939\u093E',falling:'\uD83D\uDCC9 \u0918\u091F \u0930\u0939\u093E',stable:'\u27A1\uFE0F \u0938\u094D\u0925\u093F\u0930',
+  doc_title:'\uD83D\uDD2C \u092B\u0938\u0932 \u0921\u0949\u0915\u094D\u091F\u0930',doc_sub:'\u092B\u094B\u091F\u094B \u0905\u092A\u0932\u094B\u0921 \u0915\u0930\u0947\u0902',
+  uz_t:'\u092B\u0938\u0932 \u0915\u0940 \u092B\u094B\u091F\u094B \u0905\u092A\u0932\u094B\u0921 \u0915\u0930\u0947\u0902',uz_s:'\u092A\u094D\u0930\u092D\u093E\u0935\u093F\u0924 \u092A\u0924\u094D\u0924\u0947 \u0915\u0940 \u0938\u093E\u092B \u0924\u0938\u094D\u0935\u0940\u0930 \u0932\u0947\u0902',
+  ana_t:'\u0935\u093F\u0936\u094D\u0932\u0947\u0937\u0923 \u0915\u0930\u0947\u0902',ana_again:'\u0926\u094B\u092C\u093E\u0930\u093E \u0935\u093F\u0936\u094D\u0932\u0947\u0937\u0923',
+  conf_l:'\u0935\u093F\u0936\u094D\u0935\u093E\u0938',treat_l:'\uD83D\uDC8A \u0909\u092A\u091A\u093E\u0930',prev_l:'\uD83D\uDEE1\uFE0F \u092C\u091A\u093E\u0935',
+  h_light:'\u0905\u091A\u094D\u091B\u0940 \u0930\u094B\u0936\u0928\u0940',h_focus:'\u0938\u093E\u092B \u092B\u094B\u0915\u0938',h_close:'\u092A\u093E\u0938 \u0938\u0947',
+  soil_title:'\uD83C\uDF31 \u092E\u093F\u091F\u094D\u091F\u0940 \u0938\u0932\u093E\u0939\u0915\u093E\u0930',soil_sub:'\u0909\u0930\u094D\u0935\u0930\u0915 \u0938\u093F\u092B\u093C\u093E\u0930\u093F\u0936',
+  soil_type_l:'\u092E\u093F\u091F\u094D\u091F\u0940 \u0915\u093E \u092A\u094D\u0930\u0915\u093E\u0930 \u091A\u0941\u0928\u0947\u0902',
+  sandy:'\u0930\u0947\u0924\u0940\u0932\u0940',loamy:'\u0926\u094B\u092E\u091F',clayey:'\u091A\u093F\u0915\u0928\u0940',black:'\u0915\u093E\u0932\u0940 \u092E\u093F\u091F\u094D\u091F\u0940',
+  sym_l:'\u092A\u094C\u0927\u0947 \u0915\u093E \u0932\u0915\u094D\u0937\u0923',stage_l:'\u0935\u093F\u0915\u093E\u0938 \u091A\u0930\u0923',soil_btn:'\u0938\u093F\u092B\u093C\u093E\u0930\u093F\u0936 \u0932\u0947\u0902',
+  n_l:'\u0928\u093E\u0907\u091F\u094D\u0930\u094B\u091C\u0928',p_l:'\u092B\u093C\u0949\u0938\u094D\u092B\u094B\u0930\u0938',k_l:'\u092A\u094B\u091F\u0947\u0936\u093F\u092F\u092E',
+  jrn_title:'\uD83D\uDCD2 \u0915\u0943\u0937\u093F \u0921\u093E\u092F\u0930\u0940',jrn_sub:'\u092B\u0938\u0932 \u0917\u0924\u093F\u0935\u093F\u0927\u093F \u0930\u093F\u0915\u0949\u0930\u094D\u0921',
+  jrn_add:'\u0928\u0908 \u090F\u0902\u091F\u094D\u0930\u0940',jrn_cl:'\u092B\u0938\u0932',jrn_nl:'\u0928\u094B\u091F',jrn_btn:'\u090F\u0902\u091F\u094D\u0930\u0940 \u0938\u0947\u0935 \u0915\u0930\u0947\u0902',
+  lang_l:'\u092D\u093E\u0937\u093E',cur_lang:'\u0939\u093F\u0902\u0926\u0940',
+  share_t:'\uD83D\uDCF2 AgriSathi \u0936\u0947\u092F\u0930 \u0915\u0930\u0947\u0902',share_s:'\u0926\u0942\u0938\u0930\u0947 \u0915\u093F\u0938\u093E\u0928\u094B\u0902 \u0915\u094B \u092D\u0947\u091C\u0947\u0902',
+  wa_btn:'WhatsApp',cp_btn:'\u0932\u093F\u0902\u0915 \u0915\u0949\u092A\u0940',
+  inst_t:'\uD83D\uDCF2 \u0907\u0902\u0938\u094D\u091F\u0949\u0932 \u0915\u0930\u0947\u0902',inst_s:'\u0939\u094B\u092E \u0938\u094D\u0915\u094D\u0930\u0940\u0928 \u092A\u0930 \u091C\u094B\u0921\u093C\u0947\u0902',inst_btn:'\u0907\u0902\u0938\u094D\u091F\u0949\u0932 \u0915\u0930\u0947\u0902',
+  clr_l:'\u0921\u093E\u092F\u0930\u0940 \u0938\u093E\u092B\u093C \u0915\u0930\u0947\u0902',clr_s:'\u0938\u092D\u0940 \u090F\u0902\u091F\u094D\u0930\u0940 \u0939\u091F\u093E\u090F\u0902',
+  adv_done:'\u0938\u0932\u093E\u0939 \u0924\u0948\u092F\u093E\u0930!',prices_done:'\u092D\u093E\u0935 \u0932\u094B\u0921 \u0939\u0941\u090F!',
+  ana_done:'\u0935\u093F\u0936\u094D\u0932\u0947\u0937\u0923 \u092A\u0942\u0930\u094D\u0923!',rec_done:'\u0938\u093F\u092B\u093C\u093E\u0930\u093F\u0936 \u0924\u0948\u092F\u093E\u0930!',
+  lang_chg:'\u092D\u093E\u0937\u093E \u092C\u0926\u0932\u0940',link_copied:'\u0932\u093F\u0902\u0915 \u0915\u0949\u092A\u0940 \u0939\u0941\u0906!',
+  jrn_saved:'\u090F\u0902\u091F\u094D\u0930\u0940 \u0938\u0947\u0935 \u0939\u0941\u0908!',jrn_cleared:'\u0921\u093E\u092F\u0930\u0940 \u0938\u093E\u092B\u093C \u0939\u0941\u0908\u0964',
+  loc_denied:'\u0932\u094B\u0915\u0947\u0936\u0928 \u0905\u0928\u0941\u092E\u0924\u093F \u0928\u0939\u0940\u0902 \u092E\u093F\u0932\u0940',wx_fail:'\u092E\u094C\u0938\u092E \u0932\u094B\u0921 \u0928\u0939\u0940\u0902 \u0939\u0941\u0906\u0964',
+  iv_sub:'\u092C\u091F\u0928 \u092B\u094B\u0928 \u0915\u093F\u0938\u093E\u0928\u094B\u0902 \u0915\u0947 \u0932\u093F\u090F',iv_desc:'\u0915\u093F\u0938\u0940 \u092D\u0940 \u092B\u094B\u0928 \u0938\u0947 \u0915\u0949\u0932 \u0915\u0930\u0947\u0902\u0964 \u0907\u0902\u091F\u0930\u0928\u0947\u091F \u0915\u0940 \u091C\u0930\u0942\u0930\u0924 \u0928\u0939\u0940\u0902\u0964',
+  iv_press:'\u0909\u092A\u0932\u092C\u094D\u0927 \u0938\u0947\u0935\u093E\u090F\u0902',
+  iv_m1:'\uD83C\uDFEA \u092E\u0902\u0921\u0940 \u092D\u093E\u0935',iv_m2:'\uD83C\uDF24\uFE0F \u092E\u094C\u0938\u092E',
+  iv_m3:'\uD83D\uDCA1 \u092B\u0938\u0932 \u0938\u0932\u093E\u0939',iv_m4:'\uD83D\uDD2C \u0930\u094B\u0917 \u091C\u093E\u0928\u0915\u093E\u0930\u0940',iv_m5:'\uD83D\uDC68\u200D\uD83C\uDF3E \u0935\u093F\u0936\u0947\u0937\u091C\u094D\u091E \u0938\u0947 \u092C\u093E\u0924',
+  iv_back:'\u0910\u092A \u092A\u0930 \u0935\u093E\u092A\u0938 \u091C\u093E\u090F\u0902',
+  crops:[
+    {v:'Wheat',l:'\uD83C\uDF3E \u0917\u0947\u0939\u0942\u0902'},{v:'Rice',l:'\uD83C\uDF3F \u0927\u093E\u0928'},{v:'Maize',l:'\uD83C\uDF3D \u092E\u0915\u094D\u0915\u093E'},
+    {v:'Cotton',l:'\u2601\uFE0F \u0915\u092A\u093E\u0938'},{v:'Sugarcane',l:'\uD83C\uDF8B \u0917\u0928\u094D\u0928\u093E'},{v:'Tomato',l:'\uD83C\uDF45 \u091F\u092E\u093E\u091F\u0930'},
+    {v:'Potato',l:'\uD83E\uDD54 \u0906\u0932\u0942'},{v:'Onion',l:'\uD83E\uDDC5 \u092A\u094D\u092F\u093E\u091C'},{v:'Soybean',l:'\uD83E\uDED8 \u0938\u094B\u092F\u093E\u092C\u0940\u0928'},
+    {v:'Groundnut',l:'\uD83E\uDD5C \u092E\u0942\u0902\u0917\u092B\u0932\u0940'},{v:'Mustard',l:'\uD83C\uDF3B \u0938\u0930\u0938\u094B\u0902'},{v:'Pulses',l:'\uD83C\uDF31 \u0926\u093E\u0932\u0947\u0902'}
+  ],
+  seasons:[{v:'Kharif',l:'\u0916\u0930\u0940\u092B\nJun-Oct'},{v:'Rabi',l:'\u0930\u092C\u0940\nNov-Apr'},{v:'Zaid',l:'\u091C\u093E\u092F\u0926\nApr-Jun'}],
+  states:['\u092A\u0902\u091C\u093E\u092C','\u0939\u0930\u093F\u092F\u093E\u0923\u093E','\u0909\u0924\u094D\u0924\u0930 \u092A\u094D\u0930\u0926\u0947\u0936','\u092E\u0939\u093E\u0930\u093E\u0937\u094D\u091F\u094D\u0930','\u092E\u0927\u094D\u092F \u092A\u094D\u0930\u0926\u0947\u0936','\u0930\u093E\u091C\u0938\u094D\u0925\u093E\u0928','\u0917\u0941\u091C\u0930\u093E\u0924','\u0906\u0902\u0927\u094D\u0930 \u092A\u094D\u0930\u0926\u0947\u0936','\u0924\u092E\u093F\u0932\u0928\u093E\u0921\u0942','\u0915\u0930\u094D\u0928\u093E\u091F\u0915','\u092C\u093F\u0939\u093E\u0930','\u092A\u0936\u094D\u091A\u093F\u092E \u092C\u0902\u0917\u093E\u0932'],
+  districts:{'\u092A\u0902\u091C\u093E\u092C':['\u0905\u092E\u0943\u0924\u0938\u0930','\u0932\u0941\u0927\u093F\u092F\u093E\u0928\u093E','\u091C\u093E\u0932\u0902\u0927\u0930','\u092A\u091F\u093F\u092F\u093E\u0932\u093E','\u092C\u0920\u093F\u0902\u0921\u093E'],'\u0939\u0930\u093F\u092F\u093E\u0923\u093E':['\u0905\u0902\u092C\u093E\u0932\u093E','\u0939\u093F\u0938\u093E\u0930','\u0915\u0930\u0928\u093E\u0932','\u0930\u094B\u0939\u0924\u0915','\u0938\u094B\u0928\u0940\u092A\u0924'],'\u0909\u0924\u094D\u0924\u0930 \u092A\u094D\u0930\u0926\u0947\u0936':['\u0932\u0916\u0928\u090A','\u0915\u093E\u0928\u092A\u0941\u0930','\u0906\u0917\u0930\u093E','\u0935\u093E\u0930\u093E\u0923\u0938\u0940','\u092E\u0947\u0930\u0920'],'\u092E\u0939\u093E\u0930\u093E\u0937\u094D\u091F\u094D\u0930':['\u092A\u0941\u0923\u0947','\u0928\u093E\u0938\u093F\u0915','\u0928\u093E\u0917\u092A\u0941\u0930','\u0938\u094B\u0932\u093E\u092A\u0941\u0930','\u0914\u0930\u0902\u0917\u093E\u092C\u093E\u0926'],'\u092E\u0927\u094D\u092F \u092A\u094D\u0930\u0926\u0947\u0936':['\u092D\u094B\u092A\u093E\u0932','\u0907\u0902\u0926\u094C\u0930','\u091C\u092C\u0932\u092A\u0941\u0930','\u0917\u094D\u0935\u093E\u0932\u093F\u092F\u0930','\u0938\u093E\u0917\u0930'],'\u0930\u093E\u091C\u0938\u094D\u0925\u093E\u0928':['\u091C\u092F\u092A\u0941\u0930','\u091C\u094B\u0927\u092A\u0941\u0930','\u0905\u091C\u092E\u0947\u0930','\u0915\u094B\u091F\u093E','\u092C\u0940\u0915\u093E\u0928\u0947\u0930'],'\u0917\u0941\u091C\u0930\u093E\u0924':['\u0930\u093E\u091C\u0915\u094B\u091F','\u0938\u0942\u0930\u0924','\u0935\u0921\u094B\u0926\u0930\u093E','\u0905\u0939\u092E\u0926\u093E\u092C\u093E\u0926','\u091C\u0942\u0928\u093E\u0917\u0922\u093C'],'\u0906\u0902\u0927\u094D\u0930 \u092A\u094D\u0930\u0926\u0947\u0936':['\u0917\u0941\u0902\u091F\u0942\u0930','\u0915\u0943\u0937\u094D\u0923\u093E','\u0915\u0941\u0930\u094D\u0928\u0942\u0932','\u0928\u0947\u0932\u094D\u0932\u094B\u0930','\u092A\u094D\u0930\u0915\u093E\u0936\u092E'],'\u0924\u092E\u093F\u0932\u0928\u093E\u0921\u0942':['\u0915\u094B\u092F\u0902\u092C\u091F\u0942\u0930','\u0908\u0930\u094B\u0921','\u0938\u0932\u0947\u092E','\u0924\u093F\u0930\u0941\u092A\u0941\u0930','\u092E\u0926\u0941\u0930\u0948'],'\u0915\u0930\u094D\u0928\u093E\u091F\u0915':['\u0926\u093E\u0935\u0923\u0917\u0947\u0930\u0947','\u0915\u094B\u0932\u093E\u0930','\u0924\u0941\u092E\u0915\u0941\u0930','\u092E\u0948\u0938\u0942\u0930','\u0939\u093E\u0938\u0928'],'\u092C\u093F\u0939\u093E\u0930':['\u092A\u091F\u0928\u093E','\u0917\u092F\u093E','\u092D\u093E\u0917\u0932\u092A\u0941\u0930','\u092E\u0941\u091C\u093C\u092B\u094D\u092B\u0930\u092A\u0941\u0930','\u0926\u0930\u092D\u0902\u0917\u093E'],'\u092A\u0936\u094D\u091A\u093F\u092E \u092C\u0902\u0917\u093E\u0932':['\u092C\u0930\u094D\u0927\u092E\u093E\u0928','\u092E\u0941\u0930\u094D\u0936\u093F\u0926\u093E\u092C\u093E\u0926','\u0928\u0926\u093F\u092F\u093E','\u0939\u0941\u0917\u0932\u0940','\u092E\u093F\u0926\u0928\u093E\u092A\u0941\u0930']},
+  commodities:[{v:'Wheat',l:'\u0917\u0947\u0939\u0942\u0902'},{v:'Rice',l:'\u0927\u093E\u0928'},{v:'Maize',l:'\u092E\u0915\u094D\u0915\u093E'},{v:'Cotton',l:'\u0915\u092A\u093E\u0938'},{v:'Soybean',l:'\u0938\u094B\u092F\u093E\u092C\u0940\u0928'},{v:'Onion',l:'\u092A\u094D\u092F\u093E\u091C'},{v:'Tomato',l:'\u091F\u092E\u093E\u091F\u0930'},{v:'Potato',l:'\u0906\u0932\u0942'},{v:'Mustard',l:'\u0938\u0930\u0938\u094B\u0902'},{v:'Groundnut',l:'\u092E\u0942\u0902\u0917\u092B\u0932\u0940'},{v:'Sugarcane',l:'\u0917\u0928\u094D\u0928\u093E'},{v:'Chilli',l:'\u092E\u093F\u0930\u094D\u091A'}],
+  symptoms:[{v:'none',l:'\u0915\u094B\u0908 \u0932\u0915\u094D\u0937\u0923 \u0928\u0939\u0940\u0902'},{v:'yellow',l:'\u092A\u0940\u0932\u0940 \u092A\u0924\u094D\u0924\u093F\u092F\u093E\u0901'},{v:'purple',l:'\u092C\u0948\u0902\u0917\u0928\u0940 \u092A\u0924\u094D\u0924\u093F\u092F\u093E\u0901'},{v:'brown',l:'\u092D\u0942\u0930\u0947 \u0915\u093F\u0928\u093E\u0930\u0947'},{v:'stunted',l:'\u092C\u094C\u0928\u093E \u0935\u093F\u0915\u093E\u0938'}],
+  stages:['\u0905\u0902\u0915\u0941\u0930\u0923','\u0935\u093E\u0928\u0938\u094D\u092A\u0924\u093F\u0915','\u092B\u0942\u0932 \u0905\u0935\u0938\u094D\u0925\u093E','\u0926\u093E\u0928\u093E \u092D\u0930\u0923']
+},
+ta:{
+  gm:'\u0B95\u0BBE\u0BB2\u0BC8 \u0BB5\u0BA3\u0B95\u0BCD\u0B95\u0BAE\u0BCD',ga:'\u0BAE\u0BA4\u0BBF\u0BAF \u0BB5\u0BA3\u0B95\u0BCD\u0B95\u0BAE\u0BCD',ge:'\u0BAE\u0BBE\u0BB2\u0BC8 \u0BB5\u0BA3\u0B95\u0BCD\u0B95\u0BAE\u0BCD',farmer:'\u0BB5\u0BBF\u0BB5\u0B9A\u0BBE\u0BAF\u0BBF \uD83D\uDC4B',
+  home:'\u0BAE\u0BC1\u0B95\u0BAA\u0BCD\u0BAA\u0BC1',adv:'\u0B86\u0BB2\u0BCB\u0B9A\u0BA9\u0BC8',doc:'\u0DA4\u0DBF\u0D9A\u0DCA\u0D9A\u0DBD\u0DCA',wea:'\u0BB5\u0BBE\u0BA9\u0BBF\u0BB2\u0BC8',man:'\u0B9A\u0BA8\u0BCD\u0BA4\u0BC8',
+  tools:'\u0BB5\u0BBF\u0BB0\u0BC8\u0BB5\u0BC1 \u0B95\u0BB0\u0BC1\u0BB5\u0BBF\u0B95\u0BB3\u0BCD',tip_l:'\u0B87\u0BA9\u0BCD\u0BB1\u0BC8\u0BAF \u0B95\u0BC1\u0BB1\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1',
+  tip:'\u0B86\u0BB5\u0BBF\u0BAF\u0BBE\u0BA4\u0BB2\u0BC8 \u0B95\u0BC1\u0BB1\u0BC8\u0B95\u0BCD\u0B95 \u0B95\u0BBE\u0BB2\u0BC8\u0BAF\u0BBF\u0BB2\u0BCD \u0BAA\u0BAF\u0BBF\u0BB0\u0BCD\u0B95\u0BB3\u0BC1\u0B95\u0BCD\u0B95\u0BC1 \u0BA4\u0BA3\u0BCD\u0BA3\u0BC0\u0BB0\u0BCD \u0BAA\u0BBE\u0BAF\u0BCD\u0B9A\u0BC1\u0B99\u0BCD\u0B95\u0BB3\u0BCD.',
+  adv_title:'\uD83D\uDCA1 \u0BAA\u0BAF\u0BBF\u0BB0\u0BCD \u0B86\u0BB2\u0BCB\u0B9A\u0BA9\u0BC8',adv_sub:'AI \u0BAA\u0BB0\u0BBF\u0BA8\u0BCD\u0BA4\u0BC1\u0BB0\u0BC8\u0B95\u0BB3\u0BCD',
+  adv_cl:'\u0BAA\u0BAF\u0BBF\u0BB0\u0BCD \u0BA4\u0BC7\u0BB0\u0BCD\u0BB5\u0BC1',adv_sl:'\u0BAA\u0BB0\u0BC1\u0BB5\u0BAE\u0BCD',adv_pl:'\u0E2D\u0E38\u0E07\u0E01\u0E25\u0E48 \u0BAA\u0BBF\u0BB0\u0B9A\u0BCD\u0B9A\u0BA9\u0BC8 (\u0BB5\u0BBF\u0BB0\u0BC1\u0BAE\u0BCD\u0BAA\u0BBF\u0BA9\u0BBE\u0BB2\u0BCD)',
+  adv_btn:'\u0B86\u0BB2\u0BCB\u0B9A\u0BA9\u0BC8 \u0BAA\u0BC6\u0BB1\u0BC1\u0B95',adv_rl:'\uD83D\uDCCB \u0B86\u0BB2\u0BCB\u0B9A\u0BA9\u0BC8 \u0BAE\u0BC1\u0B9F\u0BBF\u0BB5\u0BC1',
+  wx_title:'\uD83C\uDF24\uFE0F \u0BB5\u0BBE\u0BA9\u0BBF\u0BB2\u0BC8',wx_btn:'\u0B8E\u0BA9\u0BCD \u0B87\u0BB0\u0BC1\u0BAA\u0BCD\u0BAA\u0BBF\u0B9F\u0BAE\u0BCD \u0BAA\u0BAF\u0BA9\u0BCD\u0BAA\u0B9F\u0BC1\u0BA4\u0BCD\u0BA4\u0BC1',wx_load:'\u0BB5\u0BBE\u0BA9\u0BBF\u0BB2\u0BC8 \u0BAA\u0BC6\u0BB1\u0BAA\u0BCD\u0BAA\u0B9F\u0BC1\u0B95\u0BBF\u0BB1\u0BA4\u0BC1...',
+  w_al:'\uD83C\uDF3E \u0BB5\u0BBF\u0BB5\u0B9A\u0BBE\u0BAF \u0B86\u0BB2\u0BCB\u0B9A\u0BA9\u0BC8',w_hl:'\uD83D\uDCA7 \u0B88\u0BB0\u0BAA\u0BCD\u0BAA\u0BA4\u0BAE\u0BCD',w_wl:'\uD83D\uDCA8 \u0B95\u0BBE\u0BB1\u0BCD\u0BB1\u0BC1',
+  w_fl:'\uD83C\uDF21\uFE0F \u0E2D\u0E38\u0E13\u0E2B\u0E20\u0BC2\u0BAE\u0BBF',w_rl:'\uD83C\uDF27\uFE0F \u0BAE\u0BB4\u0BC8',w_pct:'\u0B9A\u0BA4\u0BB5\u0BC0\u0BA4\u0BAE\u0BCD',
+  man_title:'\uD83C\uDFEA \u0B9A\u0BA8\u0BCD\u0BA4\u0BC8 \u0BB5\u0BBF\u0BB2\u0BC8\u0B95\u0BB3\u0BCD',man_btn:'\u0BB5\u0BBF\u0BB2\u0BC8\u0B95\u0BB3\u0BCD \u0BAA\u0BC6\u0BB1\u0BC1\u0B95',
+  state_l:'\u0BAE\u0BBE\u0BA8\u0BBF\u0BB2\u0BAE\u0BCD',dist_l:'\u0BAE\u0BBE\u0BB5\u0B9F\u0BCD\u0B9F\u0BAE\u0BCD',comm_l:'\u0BAA\u0BCA\u0BB0\u0BC1\u0BB3\u0BCD',
+  modal_p:'\u0B9A\u0BA8\u0BCD\u0BA4\u0BC8 \u0BB5\u0BBF\u0BB2\u0BC8',min_p:'\u0B95\u0BC1\u0BB1\u0BC8\u0BA8\u0BCD\u0BA4\u0BAA\u0B9F\u0BCD\u0B9A\u0BAE\u0BCD',max_p:'\u0B85\u0BA4\u0BBF\u0B95\u0BAA\u0B9F\u0BCD\u0B9A\u0BAE\u0BCD',
+  market_l:'\u0B9A\u0BA8\u0BCD\u0BA4\u0BC8',trend_l:'\u0BAA\u0BCB\u0B95\u0BCD\u0B95\u0BC1',
+  rising:'\uD83D\uDCC8 \u0B8F\u0BB1\u0BC1\u0B95\u0BBF\u0BB1\u0BA4\u0BC1',falling:'\uD83D\uDCC9 \u0B87\u0BB1\u0B99\u0BCD\u0B95\u0BC1\u0B95\u0BBF\u0BB1\u0BA4\u0BC1',stable:'\u27A1\uFE0F \u0BA8\u0BBF\u0BB2\u0BC8\u0BAF\u0BBE\u0BA9\u0BA4\u0BC1',
+  doc_title:'\uD83D\uDD2C \u0BAA\u0BAF\u0BBF\u0BB0\u0BCD \u0BB5\u0BC8\u0BA4\u0BCD\u0BA4\u0BBF\u0BAF\u0BB0\u0BCD',doc_sub:'\u0BAA\u0BC1\u0B95\u0BC8\u0BAA\u0BCD\u0BAA\u0B9F\u0BAE\u0BCD \u0BAA\u0BA4\u0BBF\u0BB5\u0BC7\u0BB1\u0BCD\u0BB1\u0BC1',
+  uz_t:'\u0BAA\u0BAF\u0BBF\u0BB0\u0BCD \u0BAA\u0BC1\u0B95\u0BC8\u0BAA\u0BCD\u0BAA\u0B9F\u0BAE\u0BCD \u0BAA\u0BA4\u0BBF\u0BB5\u0BC7\u0BB1\u0BCD\u0BB1\u0BC1',uz_s:'\u0BAA\u0BBE\u0BA4\u0BBF\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F \u0B87\u0BB2\u0BC8\u0BAF\u0BBF\u0BA9\u0BCD \u0BA4\u0BC6\u0BB3\u0BBF\u0BB5\u0BBE\u0BA9 \u0BAA\u0B9F\u0BAE\u0BCD',
+  ana_t:'\u0BAA\u0B95\u0BC1\u0BAA\u0BCD\u0BAA\u0BBE\u0BAF\u0BCD\u0BB5\u0BC1',ana_again:'\u0BAE\u0BC0\u0BA3\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD \u0BAA\u0B95\u0BC1\u0BAA\u0BCD\u0BAA\u0BBE\u0BAF\u0BCD\u0BB5\u0BC1',
+  conf_l:'\u0BA8\u0BAE\u0BCD\u0BAA\u0B95\u0BA4\u0BCD\u0BA4\u0BA9\u0BCD\u0BAE\u0BC8',treat_l:'\uD83D\uDC8A \u0B9A\u0BBF\u0B95\u0BBF\u0B9A\u0BCD\u0B9A\u0BC8',prev_l:'\uD83D\uDEE1\uFE0F \u0BA4\u0B9F\u0BC1\u0BAA\u0BCD\u0BAA\u0BC1',
+  h_light:'\u0BA8\u0BB2\u0BCD\u0BB2 \u0BB5\u0BC6\u0BB3\u0BBF\u0B9A\u0BCD\u0B9A\u0BAE\u0BCD',h_focus:'\u0BA4\u0BC6\u0BB3\u0BBF\u0BB5\u0BBE\u0BA9 \u0B95\u0BB5\u0BA9\u0BAE\u0BCD',h_close:'\u0B85\u0BB0\u0BC1\u0B95\u0BBF\u0BB2\u0BCD',
+  soil_title:'\uD83C\uDF31 \u0BAE\u0BA3\u0BCD \u0B86\u0BB2\u0BCB\u0B9A\u0B95\u0BB0\u0BCD',soil_sub:'\u0E2D\u0E38\u0E23 \u0BAA\u0BB0\u0BBF\u0BA8\u0BCD\u0BA4\u0BC1\u0BB0\u0BC8',
+  soil_type_l:'\u0BAE\u0BA3\u0BCD \u0BB5\u0B95\u0BC8 \u0BA4\u0BC7\u0BB0\u0BCD\u0BB5\u0BC1',
+  sandy:'\u0BAE\u0BA3\u0BB2\u0BCD',loamy:'\u0B95\u0BB2\u0BAA\u0BCD\u0BAA\u0BC1 \u0BAE\u0BA3\u0BCD',clayey:'\u0B95\u0BB3\u0BBF\u0BAE\u0BA3\u0BCD',black:'\u0B95\u0BB0\u0BBF\u0B9A\u0BB2\u0BCD \u0BAE\u0BA3\u0BCD',
+  sym_l:'\u0B9A\u0BC6\u0B9F\u0BBF \u0B85\u0BB1\u0BBF\u0B95\u0BC1\u0BB1\u0BBF',stage_l:'\u0BB5\u0BB3\u0BB0\u0BCD\u0B9A\u0BCD\u0B9A\u0BBF \u0BA8\u0BBF\u0BB2\u0BC8',soil_btn:'\u0BAA\u0BB0\u0BBF\u0BA8\u0BCD\u0BA4\u0BC1\u0BB0\u0BC8 \u0BAA\u0BC6\u0BB1\u0BC1\u0B95',
+  n_l:'\u0BA8\u0BC8\u0B9F\u0BCD\u0BB0\u0B9C\u0BA9\u0BCD',p_l:'\u0BAA\u0BBE\u0BB8\u0BCD\u0BAA\u0BB0\u0BB8\u0BCD',k_l:'\u0BAA\u0BCA\u0B9F\u0BCD\u0B9F\u0BBE\u0B9A\u0BBF\u0BAF\u0BAE\u0BCD',
+  jrn_title:'\uD83D\uDCD2 \u0BB5\u0BBF\u0BB5\u0B9A\u0BBE\u0BAF \u0B95\u0BC1\u0BB1\u0BBF\u0BAA\u0BCD\u0BAA\u0BC7\u0B9F\u0BC1',jrn_sub:'\u0BAA\u0BAF\u0BBF\u0BB0\u0BCD \u0B9A\u0BC6\u0BAF\u0BB2\u0BCD\u0BAA\u0BBE\u0B9F\u0BC1\u0B95\u0BB3\u0BCD \u0BAA\u0BA4\u0BBF\u0BB5\u0BC1',
+  jrn_add:'\u0BAA\u0BC1\u0BA4\u0BBF\u0BAF \u0BAA\u0BA4\u0BBF\u0BB5\u0BC1',jrn_cl:'\u0BAA\u0BAF\u0BBF\u0BB0\u0BCD',jrn_nl:'\u0B95\u0BC1\u0BB1\u0BBF\u0BAA\u0BCD\u0BAA\u0BC1',jrn_btn:'\u0BAA\u0BA4\u0BBF\u0BB5\u0BC1 \u0B9A\u0BC7\u0BAE\u0BBF',
+  lang_l:'\u0BAE\u0BCA\u0BB4\u0BBF',cur_lang:'\u0BA4\u0BAE\u0BBF\u0BB4\u0BCD',
+  share_t:'\uD83D\uDCF2 AgriSathi \u0BAA\u0B95\u0BBF\u0BB0\u0BCD',share_s:'\u0BAE\u0BB1\u0BCD\u0BB1 \u0BB5\u0BBF\u0BB5\u0B9A\u0BBE\u0BAF\u0BBF\u0B95\u0BB3\u0BC1\u0B9F\u0BA9\u0BCD \u0BAA\u0B95\u0BBF\u0BB0\u0BB5\u0BC1\u0BAE\u0BCD',
+  wa_btn:'WhatsApp',cp_btn:'\u0B87\u0BA3\u0BC8\u0BAA\u0BCD\u0BAA\u0BC1 \u0BA8\u0B95\u0BB2\u0BCD',
+  inst_t:'\uD83D\uDCF2 \u0BA8\u0BBF\u0BB1\u0BC1\u0BB5\u0BC1\u0B95',inst_s:'\u0BAE\u0BC1\u0B95\u0BAA\u0BCD\u0BAA\u0BC1 \u0BA4\u0BBF\u0BB0\u0BC8\u0BAF\u0BBF\u0BB2\u0BCD \u0B9A\u0BC7\u0BB0\u0BCD',inst_btn:'\u0B87\u0BAA\u0BCD\u0BAA\u0BCB\u0BA4\u0BC1 \u0BA8\u0BBF\u0BB1\u0BC1\u0BB5\u0BC1',
+  clr_l:'\u0B95\u0BC1\u0BB1\u0BBF\u0BAA\u0BCD\u0BAA\u0BC7\u0B9F\u0BC1 \u0B85\u0BB4\u0BBF',clr_s:'\u0B85\u0BA9\u0BC8\u0BA4\u0BCD\u0BA4\u0BC1 \u0BAA\u0BA4\u0BBF\u0BB5\u0BC1\u0B95\u0BB3\u0BC1\u0BAE\u0BCD \u0BA8\u0BC0\u0B95\u0BCD\u0B95\u0BC1',
+  adv_done:'\u0B86\u0BB2\u0BCB\u0B9A\u0BA9\u0BC8 \u0BA4\u0BAF\u0BBE\u0BB0\u0BCD!',prices_done:'\u0BB5\u0BBF\u0BB2\u0BC8\u0B95\u0BB3\u0BCD \u0B8F\u0BB1\u0BCD\u0BB1\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA9!',
+  ana_done:'\u0BAA\u0B95\u0BC1\u0BAA\u0BCD\u0BAA\u0BBE\u0BAF\u0BCD\u0BB5\u0BC1 \u0BAE\u0BC1\u0B9F\u0BBF\u0BA8\u0BCD\u0BA4\u0BA4\u0BC1!',rec_done:'\u0BAA\u0BB0\u0BBF\u0BA8\u0BCD\u0BA4\u0BC1\u0BB0\u0BC8 \u0BA4\u0BAF\u0BBE\u0BB0\u0BCD!',
+  lang_chg:'\u0BAE\u0BCA\u0BB4\u0BBF \u0BAE\u0BBE\u0BB1\u0BCD\u0BB1\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1',link_copied:'\u0B87\u0BA3\u0BC8\u0BAA\u0BCD\u0BAA\u0BC1 \u0BA8\u0B95\u0BB2\u0BC6\u0B9F\u0BC1\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1!',
+  jrn_saved:'\u0BAA\u0BA4\u0BBF\u0BB5\u0BC1 \u0B9A\u0BC7\u0BAE\u0BBF\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1!',jrn_cleared:'\u0B95\u0BC1\u0BB1\u0BBF\u0BAA\u0BCD\u0BAA\u0BC7\u0B9F\u0BC1 \u0B85\u0BB4\u0BBF\u0B95\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0B9F\u0BCD\u0B9F\u0BA4\u0BC1.',
+  loc_denied:'\u0B87\u0BB0\u0BC1\u0BAA\u0BCD\u0BAA\u0BBF\u0B9F \u0B85\u0BA9\u0BC1\u0BAE\u0BA4\u0BBF \u0B87\u0BB2\u0BCD\u0BB2\u0BC8',wx_fail:'\u0BB5\u0BBE\u0BA9\u0BBF\u0BB2\u0BC8 \u0BAA\u0BC6\u0BB1 \u0BAE\u0BC1\u0B9F\u0BBF\u0BAF\u0BB5\u0BBF\u0BB2\u0BCD\u0BB2\u0BC8.',
+  iv_sub:'\u0BAA\u0BCA\u0BA4\u0BCD\u0BA4\u0BBE\u0BA9\u0BCD \u0BA4\u0BCA\u0BB2\u0BC8\u0BAA\u0BC7\u0B9A\u0BBF \u0BB5\u0BBF\u0BB5\u0B9A\u0BBE\u0BAF\u0BBF\u0B95\u0BB3\u0BC1\u0B95\u0BCD\u0B95\u0BC1',iv_desc:'\u0B8E\u0BA8\u0BCD\u0BA4 \u0BA4\u0BCA\u0BB2\u0BC8\u0BAA\u0BC7\u0B9A\u0BBF\u0BAF\u0BBF\u0BB2\u0BC1\u0BAE\u0BCD \u0B85\u0BB4\u0BC8\u0B95\u0BCD\u0B95\u0BB2\u0BBE\u0BAE\u0BCD. \u0B87\u0BA3\u0BC8\u0BAF\u0BAE\u0BCD \u0BA4\u0BC7\u0BB5\u0BC8\u0BAF\u0BBF\u0BB2\u0BCD\u0BB2\u0BC8.',
+  iv_press:'\u0B95\u0BBF\u0B9F\u0BC8\u0B95\u0BCD\u0B95\u0BC1\u0BAE\u0BCD \u0B9A\u0BC7\u0BB5\u0BC8\u0B95\u0BB3\u0BCD',
+  iv_m1:'\uD83C\uDFEA \u0B9A\u0BA8\u0BCD\u0BA4\u0BC8 \u0BB5\u0BBF\u0BB2\u0BC8\u0B95\u0BB3\u0BCD',iv_m2:'\uD83C\uDF24\uFE0F \u0BB5\u0BBE\u0BA9\u0BBF\u0BB2\u0BC8',iv_m3:'\uD83D\uDCA1 \u0BAA\u0BAF\u0BBF\u0BB0\u0BCD \u0B86\u0BB2\u0BCB\u0B9A\u0BA9\u0BC8',iv_m4:'\uD83D\uDD2C \u0BA8\u0BCB\u0BAF\u0BCD \u0E2D\u0E38\u0E15\u0E27\u0BBF',iv_m5:'\uD83D\uDC68\u200D\uD83C\uDF3E \u0BA8\u0BBF\u0BAA\u0BC1\u0BA3\u0BB0\u0BBF\u0B9F\u0BAE\u0BCD \u0BAA\u0BC7\u0B9A\u0BC1\u0B99\u0BCD\u0B95\u0BB3\u0BCD',
+  iv_back:'\u0B86\u0BAA\u0BCD\u0BAA\u0BBF\u0BB1\u0BCD\u0B95\u0BC1 \u0BA4\u0BBF\u0BB0\u0BC1\u0BAE\u0BCD\u0BAA\u0BC1',
+  crops:[{v:'Wheat',l:'\uD83C\uDF3E \u0B95\u0BCB\u0BA4\u0BC1\u0BAE\u0BC8'},{v:'Rice',l:'\uD83C\uDF3F \u0BA8\u0BC6\u0BB2\u0BCD'},{v:'Maize',l:'\uD83C\uDF3D \u0B9A\u0BCB\u0BB3\u0BAE\u0BCD'},{v:'Cotton',l:'\u2601\uFE0F \u0BAA\u0BB0\u0BC1\u0BA4\u0BCD\u0BA4\u0BBF'},{v:'Sugarcane',l:'\uD83C\uDF8B \u0B95\u0BB0\u0BC1\u0BAE\u0BCD\u0BAA\u0BC1'},{v:'Tomato',l:'\uD83C\uDF45 \u0BA4\u0B95\u0BCD\u0B95\u0BBE\u0BB3\u0BBF'},{v:'Potato',l:'\uD83E\uDD54 \u0E2D\u0E38\u0BB0\u0BC1\u0BB3\u0BC8'},{v:'Onion',l:'\uD83E\uDDC5 \u0BB5\u0BC6\u0B99\u0BCD\u0B95\u0BBE\u0BAF\u0BAE\u0BCD'},{v:'Soybean',l:'\uD83E\uDED8 \u0B9A\u0BCB\u0BAF\u0BBE'},{v:'Groundnut',l:'\uD83E\uDD5C \u0BB5\u0BC7\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0B9F\u0BB2\u0BC8'},{v:'Mustard',l:'\uD83C\uDF3B \u0B95\u0B9F\u0BC1\u0B95\u0BC1'},{v:'Pulses',l:'\uD83C\uDF31 \u0BAA\u0BAF\u0BB1\u0BC1'}],
+  seasons:[{v:'Kharif',l:'\u0B95\u0BB0\u0BC0\u0B83\u0BAA\u0BCD\nJun-Oct'},{v:'Rabi',l:'\u0BB0\u0BAA\u0BBF\nNov-Apr'},{v:'Zaid',l:'\u0B9A\u0BBE\u0BAF\u0BBF\u0BA4\u0BCD\nApr-Jun'}],
+  states:['\u0BAA\u0B9E\u0BCD\u0B9A\u0BBE\u0BAA\u0BCD','\u0BB9\u0BB0\u0BBF\u0BAF\u0BBE\u0BA9\u0BBE','\u0E2D\u0E38\u0BA4\u0BCD\u0BA4\u0BB0\u0BAA\u0BCD\u0BAA\u0BBF\u0BB0\u0BA4\u0BC7\u0B9A\u0BAE\u0BCD','\u0BAE\u0B95\u0BBE\u0BB0\u0BBE\u0BB7\u0BCD\u0B9F\u0BBF\u0BB0\u0BBE','\u0BAE\u0BA4\u0BCD\u0BA4\u0BBF\u0BAF\u0BAA\u0BCD\u0BAA\u0BBF\u0BB0\u0BA4\u0BC7\u0B9A\u0BAE\u0BCD','\u0BB0\u0BBE\u0B9C\u0BB8\u0BCD\u0BA4\u0BBE\u0BA9\u0BCD','\u0B95\u0BC1\u0B9C\u0BB0\u0BBE\u0BA4\u0BCD','\u0B86\u0BA8\u0BCD\u0BA4\u0BBF\u0BB0\u0BAA\u0BCD\u0BAA\u0BBF\u0BB0\u0BA4\u0BC7\u0B9A\u0BAE\u0BCD','\u0BA4\u0BAE\u0BBF\u0BB4\u0BCD\u0BA8\u0BBE\u0B9F\u0BC1','\u0B95\u0BB0\u0BCD\u0BA8\u0BBE\u0B9F\u0B95\u0BBE','\u0BAA\u0BC0\u0BB9\u0BBE\u0BB0\u0BCD','\u0BAE\u0BC7\u0BB1\u0BCD\u0B95\u0BC1 \u0BB5\u0B99\u0BCD\u0B95\u0BBE\u0BB3\u0BAE\u0BCD'],
+  districts:{'\u0BA4\u0BAE\u0BBF\u0BB4\u0BCD\u0BA8\u0BBE\u0B9F\u0BC1':['\u0B95\u0BCB\u0BAF\u0BAE\u0BCD\u0BAA\u0BC1\u0BA4\u0BCD\u0BA4\u0BC2\u0BB0\u0BCD','\u0B88\u0BB0\u0BCB\u0B9F\u0BC1','\u0B9A\u0BC7\u0BB2\u0BAE\u0BCD','\u0BA4\u0BBF\u0BB0\u0BC1\u0BAA\u0BCD\u0BAA\u0BC2\u0BB0\u0BCD','\u0BAE\u0BA4\u0BC1\u0BB0\u0BC8'],'\u0BAA\u0B9E\u0BCD\u0B9A\u0BBE\u0BAA\u0BCD':['Amritsar','Ludhiana','Jalandhar','Patiala','Bathinda'],'\u0BB9\u0BB0\u0BBF\u0BAF\u0BBE\u0BA9\u0BBE':['Ambala','Hisar','Karnal','Rohtak','Sonipat'],'\u0E2D\u0E38\u0BA4\u0BCD\u0BA4\u0BB0\u0BAA\u0BCD\u0BAA\u0BBF\u0BB0\u0BA4\u0BC7\u0B9A\u0BAE\u0BCD':['Lucknow','Kanpur','Agra','Varanasi','Meerut'],'\u0BAE\u0B95\u0BBE\u0BB0\u0BBE\u0BB7\u0BCD\u0B9F\u0BBF\u0BB0\u0BBE':['Pune','Nashik','Nagpur','Solapur','Aurangabad'],'\u0BAE\u0BA4\u0BCD\u0BA4\u0BBF\u0BAF\u0BAA\u0BCD\u0BAA\u0BBF\u0BB0\u0BA4\u0BC7\u0B9A\u0BAE\u0BCD':['Bhopal','Indore','Jabalpur','Gwalior','Sagar'],'\u0BB0\u0BBE\u0B9C\u0BB8\u0BCD\u0BA4\u0BBE\u0BA9\u0BCD':['Jaipur','Jodhpur','Ajmer','Kota','Bikaner'],'\u0B95\u0BC1\u0B9C\u0BB0\u0BBE\u0BA4\u0BCD':['Rajkot','Surat','Vadodara','Ahmedabad','Junagadh'],'\u0B86\u0BA8\u0BCD\u0BA4\u0BBF\u0BB0\u0BAA\u0BCD\u0BAA\u0BBF\u0BB0\u0BA4\u0BC7\u0B9A\u0BAE\u0BCD':['Guntur','Krishna','Kurnool','Nellore','Prakasam'],'\u0B95\u0BB0\u0BCD\u0BA8\u0BBE\u0B9F\u0B95\u0BBE':['Davangere','Kolar','Tumkur','Mysore','Hassan'],'\u0BAA\u0BC0\u0BB9\u0BBE\u0BB0\u0BCD':['Patna','Gaya','Bhagalpur','Muzaffarpur','Darbhanga'],'\u0BAE\u0BC7\u0BB1\u0BCD\u0B95\u0BC1 \u0BB5\u0B99\u0BCD\u0B95\u0BBE\u0BB3\u0BAE\u0BCD':['Bardhaman','Murshidabad','Nadia','Hooghly','Midnapore']},
+  commodities:[{v:'Wheat',l:'\u0B95\u0BCB\u0BA4\u0BC1\u0BAE\u0BC8'},{v:'Rice',l:'\u0BA8\u0BC6\u0BB2\u0BCD'},{v:'Maize',l:'\u0B9A\u0BCB\u0BB3\u0BAE\u0BCD'},{v:'Cotton',l:'\u0BAA\u0BB0\u0BC1\u0BA4\u0BCD\u0BA4\u0BBF'},{v:'Soybean',l:'\u0B9A\u0BCB\u0BAF\u0BBE\u0BAA\u0BC0\u0BA9\u0BCD'},{v:'Onion',l:'\u0BB5\u0BC6\u0B99\u0BCD\u0B95\u0BBE\u0BAF\u0BAE\u0BCD'},{v:'Tomato',l:'\u0BA4\u0B95\u0BCD\u0B95\u0BBE\u0BB3\u0BBF'},{v:'Potato',l:'\u0E2D\u0E38\u0BB0\u0BC1\u0BB3\u0BC8'},{v:'Mustard',l:'\u0B95\u0B9F\u0BC1\u0B95\u0BC1'},{v:'Groundnut',l:'\u0BB5\u0BC7\u0BB0\u0BCD\u0B95\u0BCD\u0B95\u0B9F\u0BB2\u0BC8'},{v:'Sugarcane',l:'\u0B95\u0BB0\u0BC1\u0BAE\u0BCD\u0BAA\u0BC1'},{v:'Chilli',l:'\u0BAE\u0BBF\u0BB3\u0B95\u0BBE\u0BAF\u0BCD'}],
+  symptoms:[{v:'none',l:'\u0B85\u0BB1\u0BBF\u0B95\u0BC1\u0BB1\u0BBF \u0B87\u0BB2\u0BCD\u0BB2\u0BC8'},{v:'yellow',l:'\u0BAE\u0B9E\u0BCD\u0B9A\u0BB3\u0BCD \u0B87\u0BB2\u0BC8\u0B95\u0BB3\u0BCD'},{v:'purple',l:'\u0B8A\u0BA4\u0BBE \u0B87\u0BB2\u0BC8\u0B95\u0BB3\u0BCD'},{v:'brown',l:'\u0BAA\u0BB4\u0BC1\u0BAA\u0BCD\u0BAA\u0BC1 \u0BA8\u0BC1\u0BA9\u0BBF\u0B95\u0BB3\u0BCD'},{v:'stunted',l:'\u0B95\u0BC1\u0B9F\u0BCD\u0B9F\u0BC8\u0BAF\u0BBE\u0BA9 \u0BB5\u0BB3\u0BB0\u0BCD\u0B9A\u0BCD\u0B9A\u0BBF'}],
+  stages:['\u0BA8\u0BBE\u0BB1\u0BCD\u0BB1\u0BC1','\u0BB5\u0BB3\u0BB0\u0BCD\u0B9A\u0BCD\u0B9A\u0BBF','\u0BAA\u0BC2\u0B95\u0BCD\u0B95\u0BC1\u0BAE\u0BCD','\u0BAE\u0B95\u0B9A\u0BC2\u0BB2\u0BCD']
+},
+pa:{
+  gm:'\u0A38\u0A3C\u0A41\u0A2D \u0A38\u0A35\u0A47\u0A30',ga:'\u0A28\u0A2E\u0A38\u0A15\u0A3E\u0A30',ge:'\u0A38\u0A3C\u0A41\u0A2D \u0A38\u0A3C\u0A3E\u0A2E',farmer:'\u0A15\u0A3F\u0A38\u0A3E\u0A28 \uD83D\uDC4B',
+  home:'\u0A39\u0A4B\u0A2E',adv:'\u0A38\u0A32\u0A3E\u0A39',doc:'\u0A21\u0A3E\u0A15\u0A1F\u0A30',wea:'\u0A2E\u0A4C\u0A38\u0A2E',man:'\u0A2E\u0A70\u0A21\u0A40',
+  tools:'\u0A24\u0A47\u0A1C\u0A3C \u0A38\u0A70\u0A26',tip_l:'\u0A05\u0A71\u0A1C \u0A26\u0A40 \u0A38\u0A32\u0A3E\u0A39',
+  tip:'\u0A2B\u0A38\u0A32 \u0A28\u0A42\u0A70 \u0A38\u0A35\u0A47\u0A30\u0A47 \u0A1C\u0A32\u0A26\u0A40 \u0A2A\u0A3E\u0A23\u0A40 \u0A26\u0A3F\u0A13 \u2014 \u0A2D\u0A3E\u0A2B\u0A3C \u0A05\u0A24\u0A47 \u0A2B\u0A70\u0A17\u0A32 \u0A30\u0A4B\u0A17 \u0A18\u0A71\u0A1F \u0A39\u0A4B\u0A35\u0A47\u0A17\u0A3E\u0964',
+  adv_title:'\uD83D\uDCA1 \u0A2B\u0A38\u0A32 \u0A38\u0A32\u0A3E\u0A39',adv_sub:'AI \u0A38\u0A3F\u0A2B\u0A3C\u0A3E\u0A30\u0A38\u0A3C\u0A3E\u0A02',
+  adv_cl:'\u0A2B\u0A38\u0A32 \u0A1A\u0A41\u0A23\u0A4B',adv_sl:'\u0A2E\u0A4C\u0A38\u0A2E',adv_pl:'\u0A24\u0A41\u0A39\u0A3E\u0A21\u0A40 \u0A38\u0A2E\u0A71\u0A38\u0A3C\u0A3F\u0A06 (\u0A35\u0A3F\u0A15\u0A32\u0A2A\u0A3F\u0A15)',
+  adv_btn:'\u0A38\u0A32\u0A3E\u0A39 \u0A32\u0A13',adv_rl:'\uD83D\uDCCB \u0A38\u0A32\u0A3E\u0A39 \u0A28\u0A24\u0A40\u0A1C\u0A3E',
+  wx_title:'\uD83C\uDF24\uFE0F \u0A2E\u0A4C\u0A38\u0A2E',wx_btn:'\u0A2E\u0A47\u0A30\u0A40 \u0A32\u0A4B\u0A15\u0A47\u0A38\u0A3C\u0A28 \u0A35\u0A30\u0A24\u0A4B',wx_load:'\u0A2E\u0A4C\u0A38\u0A2E \u0A21\u0A47\u0A1F\u0A3E \u0A32\u0A4B\u0A21 \u0A39\u0A4B \u0A30\u0A3F\u0A39\u0A3E \u0A39\u0A48...',
+  w_al:'\uD83C\uDF3E \u0A16\u0A47\u0A24\u0A40 \u0A38\u0A32\u0A3E\u0A39',w_hl:'\uD83D\uDCA7 \u0A28\u0A2E\u0A40',w_wl:'\uD83D\uDCA8 \u0A39\u0A35\u0A3E',
+  w_fl:'\uD83C\uDF21\uFE0F \u0A2E\u0A39\u0A3F\u0A38\u0A42\u0A38',w_rl:'\uD83C\uDF27\uFE0F \u0A2E\u0A40\u0A02\u0A39',w_pct:'\u0A2A\u0A4D\u0A30\u0A24\u0A40\u0A38\u0A3C\u0A24',
+  man_title:'\uD83C\uDFEA \u0A2E\u0A70\u0A21\u0A40 \u0A2D\u0A3E\u0A05',man_btn:'\u0A2D\u0A3E\u0A05 \u0A26\u0A47\u0A16\u0A4B',
+  state_l:'\u0A38\u0A42\u0A2C\u0A3E',dist_l:'\u0A1C\u0A3C\u0A3F\u0A32\u0A4D\u0A39\u0A3E',comm_l:'\u0A2B\u0A38\u0A32',
+  modal_p:'\u0A2E\u0A4B\u0A21\u0A32 \u0A2D\u0A3E\u0A05',min_p:'\u0A18\u0A71\u0A1F\u0A4B-\u0A18\u0A71\u0A1F',max_p:'\u0A35\u0A71\u0A27 \u0A24\u0A4B\u0A02 \u0A35\u0A71\u0A27',
+  market_l:'\u0A2E\u0A70\u0A21\u0A40',trend_l:'\u0A30\u0A41\u0A1D\u0A3E\u0A28',
+  rising:'\uD83D\uDCC8 \u0A1A\u0A5C\u0A3C \u0A30\u0A3F\u0A39\u0A3E',falling:'\uD83D\uDCC9 \u0A18\u0A1F \u0A30\u0A3F\u0A39\u0A3E',stable:'\u27A1\uFE0F \u0A38\u0A25\u0A3F\u0A30',
+  doc_title:'\uD83D\uDD2C \u0A2B\u0A38\u0A32 \u0A21\u0A3E\u0A15\u0A1F\u0A30',doc_sub:'\u0A2B\u0A4B\u0A1F\u0A4B \u0A05\u0A2A\u0A32\u0A4B\u0A21 \u0A15\u0A30\u0A4B',
+  uz_t:'\u0A2B\u0A38\u0A32 \u0A26\u0A40 \u0A2B\u0A4B\u0A1F\u0A4B \u0A05\u0A2A\u0A32\u0A4B\u0A21 \u0A15\u0A30\u0A4B',uz_s:'\u0A2A\u0A4D\u0A30\u0A2D\u0A3E\u0A35\u0A3F\u0A24 \u0A2A\u0A71\u0A24\u0A47 \u0A26\u0A40 \u0A38\u0A3E\u0A2B\u0A3C \u0A24\u0A38\u0A35\u0A40\u0A30 \u0A32\u0A4B',
+  ana_t:'\u0A35\u0A3F\u0A38\u0A3C\u0A32\u0A47\u0A38\u0A3C\u0A23 \u0A15\u0A30\u0A4B',ana_again:'\u0A26\u0A41\u0A2C\u0A3E\u0A30\u0A3E \u0A35\u0A3F\u0A38\u0A3C\u0A32\u0A47\u0A38\u0A3C\u0A23',
+  conf_l:'\u0A2D\u0A30\u0A4B\u0A38\u0A3E',treat_l:'\uD83D\uDC8A \u0A07\u0A32\u0A3E\u0A1C',prev_l:'\uD83D\uDEE1\uFE0F \u0A2C\u0A1A\u0A3E\u0A05',
+  h_light:'\u0A1A\u0A70\u0A17\u0A40 \u0A30\u0A4C\u0A38\u0A3C\u0A28\u0A40',h_focus:'\u0A38\u0A3E\u0A2B\u0A3C \u0A2B\u0A4B\u0A15\u0A38',h_close:'\u0A28\u0A47\u0A5C\u0A47 \u0A24\u0A4B\u0A02',
+  soil_title:'\uD83C\uDF31 \u0A2E\u0A3F\u0A71\u0A1F\u0A40 \u0A38\u0A32\u0A3E\u0A39\u0A15\u0A3E\u0A30',soil_sub:'\u0A16\u0A3E\u0A26 \u0A38\u0A3F\u0A2B\u0A3C\u0A3E\u0A30\u0A38\u0A3C',
+  soil_type_l:'\u0A2E\u0A3F\u0A71\u0A1F\u0A40 \u0A26\u0A40 \u0A15\u0A3F\u0A38\u0A2E \u0A1A\u0A41\u0A23\u0A4B',
+  sandy:'\u0A30\u0A47\u0A24\u0A32\u0A40',loamy:'\u0A26\u0A4B\u0A2E\u0A1F',clayey:'\u0A1A\u0A3F\u0A15\u0A28\u0A40',black:'\u0A15\u0A3E\u0A32\u0A40 \u0A2E\u0A3F\u0A71\u0A1F\u0A40',
+  sym_l:'\u0A2A\u0A4C\u0A26\u0A47 \u0A26\u0A47 \u0A32\u0A71\u0A1B\u0A23',stage_l:'\u0A35\u0A3F\u0A15\u0A3E\u0A38 \u0A05\u0A35\u0A38\u0A25\u0A3E',soil_btn:'\u0A38\u0A3F\u0A2B\u0A3C\u0A3E\u0A30\u0A38\u0A3C \u0A32\u0A13',
+  n_l:'\u0A28\u0A3E\u0A08\u0A1F\u0A4D\u0A30\u0A4B\u0A1C\u0A28',p_l:'\u0A2B\u0A3C\u0A3E\u0A38\u0A2B\u0A47\u0A30\u0A38',k_l:'\u0A2A\u0A4B\u0A1F\u0A3E\u0A38\u0A3C\u0A40\u0A05\u0A2E',
+  jrn_title:'\uD83D\uDCD2 \u0A16\u0A47\u0A24\u0A40 \u0A21\u0A3E\u0A07\u0A30\u0A40',jrn_sub:'\u0A2B\u0A38\u0A32 \u0A17\u0A24\u0A3F\u0A35\u0A3F\u0A27\u0A40 \u0A30\u0A3F\u0A15\u0A3C\u0A3E\u0A30\u0A21',
+  jrn_add:'\u0A28\u0A35\u0A40\u0A02 \u0A10\u0A02\u0A1F\u0A4D\u0A30\u0A40',jrn_cl:'\u0A2B\u0A38\u0A32',jrn_nl:'\u0A28\u0A4B\u0A1F',jrn_btn:'\u0A10\u0A02\u0A1F\u0A4D\u0A30\u0A40 \u0A38\u0A47\u0A35 \u0A15\u0A30\u0A4B',
+  lang_l:'\u0A2D\u0A3E\u0A38\u0A3C\u0A3E',cur_lang:'\u0A2A\u0A70\u0A1C\u0A3E\u0A2C\u0A40',
+  share_t:'\uD83D\uDCF2 AgriSathi \u0A38\u0A3C\u0A47\u0A05\u0A30 \u0A15\u0A30\u0A4B',share_s:'\u0A26\u0A42\u0A1C\u0A47 \u0A15\u0A3F\u0A38\u0A3E\u0A28\u0A3E\u0A02 \u0A28\u0A3E\u0A32 \u0A38\u0A3E\u0A02\u0A1D\u0A3E \u0A15\u0A30\u0A4B',
+  wa_btn:'WhatsApp',cp_btn:'\u0A32\u0A3F\u0A70\u0A15 \u0A15\u0A3E\u0A2A\u0A40',
+  inst_t:'\uD83D\uDCF2 \u0A07\u0A70\u0A38\u0A1F\u0A3E\u0A32 \u0A15\u0A30\u0A4B',inst_s:'\u0A39\u0A4B\u0A2E \u0A38\u0A15\u0A4D\u0A30\u0A40\u0A28 \u0A24\u0A47 \u0A1C\u0A4B\u0A5C\u0A4B',inst_btn:'\u0A39\u0A41\u0A23\u0A47 \u0A07\u0A70\u0A38\u0A1F\u0A3E\u0A32 \u0A15\u0A30\u0A4F',
+  clr_l:'\u0A21\u0A3E\u0A07\u0A30\u0A40 \u0A38\u0A3E\u0A2B\u0A3C \u0A15\u0A30\u0A4B',clr_s:'\u0A38\u0A3E\u0A30\u0A40\u0A06\u0A02 \u0A10\u0A02\u0A1F\u0A4D\u0A30\u0A40\u0A06\u0A02 \u0A2E\u0A3F\u0A1F\u0A3E\u0A13',
+  adv_done:'\u0A38\u0A32\u0A3E\u0A39 \u0A24\u0A3F\u0A06\u0A30!',prices_done:'\u0A2D\u0A3E\u0A05 \u0A32\u0A4B\u0A21 \u0A39\u0A4B\u0A0F!',
+  ana_done:'\u0A35\u0A3F\u0A38\u0A3C\u0A32\u0A47\u0A38\u0A3C\u0A23 \u0A2E\u0A41\u0A15\u0A70\u0A2E\u0A32!',rec_done:'\u0A38\u0A3F\u0A2B\u0A3C\u0A3E\u0A30\u0A38\u0A3C \u0A24\u0A3F\u0A06\u0A30!',
+  lang_chg:'\u0A2D\u0A3E\u0A38\u0A3C\u0A3E \u0A2C\u0A26\u0A32\u0A40',link_copied:'\u0A32\u0A3F\u0A70\u0A15 \u0A15\u0A3E\u0A2A\u0A40 \u0A39\u0A4B\u0A07\u0A06!',
+  jrn_saved:'\u0A10\u0A02\u0A1F\u0A4D\u0A30\u0A40 \u0A38\u0A47\u0A35 \u0A39\u0A4B\u0A08!',jrn_cleared:'\u0A21\u0A3E\u0A07\u0A30\u0A40 \u0A38\u0A3E\u0A2B\u0A3C \u0A39\u0A4B\u0A08\u0964',
+  loc_denied:'\u0A32\u0A4B\u0A15\u0A47\u0A38\u0A3C\u0A28 \u0A05\u0A28\u0A41\u0A2E\u0A24\u0A40 \u0A28\u0A39\u0A40\u0A02 \u0A2E\u0A3F\u0A32\u0A40',wx_fail:'\u0A2E\u0A4C\u0A38\u0A2E \u0A32\u0A4B\u0A21 \u0A28\u0A39\u0A40\u0A02 \u0A39\u0A4B\u0A07\u0A06\u0964',
+  iv_sub:'\u0A2C\u0A1F\u0A28 \u0A2B\u0A4B\u0A28 \u0A15\u0A3F\u0A38\u0A3E\u0A28\u0A3E\u0A02 \u0A32\u0A08',iv_desc:'\u0A15\u0A3F\u0A38\u0A47 \u0A35\u0A40 \u0A2B\u0A4B\u0A28 \u0A24\u0A4B\u0A02 \u0A15\u0A3E\u0A32 \u0A15\u0A30\u0A4B\u0964 \u0A07\u0A70\u0A1F\u0A30\u0A28\u0A48\u0A71\u0A1F \u0A26\u0A40 \u0A32\u0A4B\u0A5C \u0A28\u0A39\u0A40\u0A02\u0964',
+  iv_press:'\u0A09\u0A2A\u0A32\u0A2C\u0A27 \u0A38\u0A47\u0A35\u0A3E\u0A35\u0A3E\u0A02',
+  iv_m1:'\uD83C\uDFEA \u0A2E\u0A70\u0A21\u0A40 \u0A2D\u0A3E\u0A05',iv_m2:'\uD83C\uDF24\uFE0F \u0A2E\u0A4C\u0A38\u0A2E',iv_m3:'\uD83D\uDCA1 \u0A2B\u0A38\u0A32 \u0A38\u0A32\u0A3E\u0A39',iv_m4:'\uD83D\uDD2C \u0A30\u0A4B\u0A17 \u0A2E\u0A26\u0A26',iv_m5:'\uD83D\uDC68\u200D\uD83C\uDF3E \u0A2E\u0A3E\u0A39\u0A3F\u0A30 \u0A28\u0A3E\u0A32 \u0A17\u0A71\u0A32',
+  iv_back:'\u0A10\u0A2A \u0A24\u0A47 \u0A35\u0A3E\u0A2A\u0A38 \u0A1C\u0A3E\u0A13',
+  crops:[{v:'Wheat',l:'\uD83C\uDF3E \u0A15\u0A23\u0A15'},{v:'Rice',l:'\uD83C\uDF3F \u0A1D\u0A4B\u0A28\u0A3E'},{v:'Maize',l:'\uD83C\uDF3D \u0A2E\u0A71\u0A15\u0A40'},{v:'Cotton',l:'\u2601\uFE0F \u0A28\u0A30\u0A2E\u0A3E'},{v:'Sugarcane',l:'\uD83C\uDF8B \u0A17\u0A70\u0A28\u0A3E'},{v:'Tomato',l:'\uD83C\uDF45 \u0A1F\u0A2E\u0A3E\u0A1F\u0A30'},{v:'Potato',l:'\uD83E\uDD54 \u0A06\u0A32\u0A42'},{v:'Onion',l:'\uD83E\uDDC5 \u0A2A\u0A3F\u0A06\u0A1C\u0A3C'},{v:'Soybean',l:'\uD83E\uDED8 \u0A38\u0A4B\u0A07\u0A06'},{v:'Groundnut',l:'\uD83E\uDD5C \u0A2E\u0A42\u0A70\u0A17\u0A2B\u0A32\u0A40'},{v:'Mustard',l:'\uD83C\uDF3B \u0A38\u0A30\u0A4D\u0A39\u0A4B\u0A02'},{v:'Pulses',l:'\uD83C\uDF31 \u0A26\u0A3E\u0A32\u0A3E\u0A02'}],
+  seasons:[{v:'Kharif',l:'\u0A16\u0A30\u0A40\u0A2B\u0A3C\nJun-Oct'},{v:'Rabi',l:'\u0A30\u0A2C\u0A40\nNov-Apr'},{v:'Zaid',l:'\u0A1C\u0A3C\u0A48\u0A26\nApr-Jun'}],
+  states:['\u0A2A\u0A70\u0A1C\u0A3E\u0A2C','\u0A39\u0A30\u0A3F\u0A06\u0A23\u0A3E','\u0A09\u0A71\u0A24\u0A30 \u0A2A\u0A4D\u0A30\u0A26\u0A47\u0A38\u0A3C','\u0A2E\u0A39\u0A3E\u0A30\u0A3E\u0A38\u0A3C\u0A1F\u0A30','\u0A2E\u0A71\u0A27 \u0A2A\u0A4D\u0A30\u0A26\u0A47\u0A38\u0A3C','\u0A30\u0A3E\u0A1C\u0A38\u0A25\u0A3E\u0A28','\u0A17\u0A41\u0A1C\u0A30\u0A3E\u0A24','\u0A06\u0A02\u0A27\u0A30\u0A3E \u0A2A\u0A4D\u0A30\u0A26\u0A47\u0A38\u0A3C','\u0A24\u0A2E\u0A3F\u0A32\u0A28\u0A3E\u0A21\u0A42','\u0A15\u0A30\u0A28\u0A3E\u0A1F\u0A15','\u0A2C\u0A3F\u0A39\u0A3E\u0A30','\u0A2A\u0A71\u0A1B\u0A2E\u0A40 \u0A2C\u0A70\u0A17\u0A3E\u0A32'],
+  districts:{'\u0A2A\u0A70\u0A1C\u0A3E\u0A2C':['\u0A05\u0A70\u0A2E\u0A4D\u0A30\u0A3F\u0A24\u0A38\u0A30','\u0A32\u0A41\u0A27\u0A3F\u0A06\u0A23\u0A3E','\u0A1C\u0A32\u0A70\u0A27\u0A30','\u0A2A\u0A1F\u0A3F\u0A06\u0A32\u0A3E','\u0A2C\u0A20\u0A3F\u0A70\u0A21\u0A3E'],'\u0A39\u0A30\u0A3F\u0A06\u0A23\u0A3E':['\u0A05\u0A70\u0A2C\u0A3E\u0A32\u0A3E','\u0A39\u0A3F\u0A38\u0A3E\u0A30','\u0A15\u0A30\u0A28\u0A3E\u0A32','\u0A30\u0A4B\u0A39\u0A24\u0A15','\u0A38\u0A4B\u0A28\u0A40\u0A2A\u0A24'],'\u0A09\u0A71\u0A24\u0A30 \u0A2A\u0A4D\u0A30\u0A26\u0A47\u0A38\u0A3C':['\u0A32\u0A16\u0A28\u0A0A','\u0A15\u0A3E\u0A28\u0A2A\u0A41\u0A30','\u0A06\u0A17\u0A30\u0A3E','\u0A35\u0A3E\u0A30\u0A3E\u0A23\u0A38\u0A40','\u0A2E\u0A47\u0A30\u0A20'],'\u0A2E\u0A39\u0A3E\u0A30\u0A3E\u0A38\u0A3C\u0A1F\u0A30':['\u0A2A\u0A41\u0A23\u0A47','\u0A28\u0A3E\u0A38\u0A3F\u0A15','\u0A28\u0A3E\u0A17\u0A2A\u0A41\u0A30','\u0A38\u0A4B\u0A32\u0A3E\u0A2A\u0A41\u0A30','\u0A14\u0A30\u0A70\u0A17\u0A3E\u0A2C\u0A3E\u0A26'],'\u0A2E\u0A71\u0A27 \u0A2A\u0A4D\u0A30\u0A26\u0A47\u0A38\u0A3C':['\u0A2D\u0A4B\u0A2A\u0A3E\u0A32','\u0A07\u0A70\u0A26\u0A4C\u0A30','\u0A1C\u0A2C\u0A32\u0A2A\u0A41\u0A30','\u0A17\u0A35\u0A3E\u0A32\u0A40\u0A05\u0A30','\u0A38\u0A3E\u0A17\u0A30'],'\u0A30\u0A3E\u0A1C\u0A38\u0A25\u0A3E\u0A28':['\u0A1C\u0A48\u0A2A\u0A41\u0A30','\u0A1C\u0A4B\u0A27\u0A2A\u0A41\u0A30','\u0A05\u0A1C\u0A2E\u0A47\u0A30','\u0A15\u0A4B\u0A1F\u0A3E','\u0A2C\u0A40\u0A15\u0A3E\u0A28\u0A47\u0A30'],'\u0A17\u0A41\u0A1C\u0A30\u0A3E\u0A24':['\u0A30\u0A3E\u0A1C\u0A15\u0A4B\u0A1F','\u0A38\u0A42\u0A30\u0A24','\u0A35\u0A21\u0A4B\u0A26\u0A30\u0A3E','\u0A05\u0A39\u0A3F\u0A2E\u0A26\u0A3E\u0A2C\u0A3E\u0A26','\u0A1C\u0A42\u0A28\u0A3E\u0A17\u0A5C\u0A4D\u0A39'],'\u0A06\u0A02\u0A27\u0A30\u0A3E \u0A2A\u0A4D\u0A30\u0A26\u0A47\u0A38\u0A3C':['Guntur','Krishna','Kurnool','Nellore','Prakasam'],'\u0A24\u0A2E\u0A3F\u0A32\u0A28\u0A3E\u0A21\u0A42':['Coimbatore','Erode','Salem','Tirupur','Madurai'],'\u0A15\u0A30\u0A28\u0A3E\u0A1F\u0A15':['Davangere','Kolar','Tumkur','Mysore','Hassan'],'\u0A2C\u0A3F\u0A39\u0A3E\u0A30':['Patna','Gaya','Bhagalpur','Muzaffarpur','Darbhanga'],'\u0A2A\u0A71\u0A1B\u0A2E\u0A40 \u0A2C\u0A70\u0A17\u0A3E\u0A32':['Bardhaman','Murshidabad','Nadia','Hooghly','Midnapore']},
+  commodities:[{v:'Wheat',l:'\u0A15\u0A23\u0A15'},{v:'Rice',l:'\u0A1A\u0A4C\u0A32'},{v:'Maize',l:'\u0A2E\u0A71\u0A15\u0A40'},{v:'Cotton',l:'\u0A15\u0A2A\u0A3E\u0A39'},{v:'Soybean',l:'\u0A38\u0A4B\u0A07\u0A06\u0A2C\u0A40\u0A28'},{v:'Onion',l:'\u0A2A\u0A3F\u0A06\u0A1C\u0A3C'},{v:'Tomato',l:'\u0A1F\u0A2E\u0A3E\u0A1F\u0A30'},{v:'Potato',l:'\u0A06\u0A32\u0A42'},{v:'Mustard',l:'\u0A38\u0A30\u0A4D\u0A39\u0A4B\u0A02'},{v:'Groundnut',l:'\u0A2E\u0A42\u0A70\u0A17\u0A2B\u0A32\u0A40'},{v:'Sugarcane',l:'\u0A17\u0A70\u0A28\u0A3E'},{v:'Chilli',l:'\u0A2E\u0A3F\u0A30\u0A1A'}],
+  symptoms:[{v:'none',l:'\u0A15\u0A4B\u0A08 \u0A32\u0A71\u0A1B\u0A23 \u0A28\u0A39\u0A40\u0A02'},{v:'yellow',l:'\u0A2A\u0A40\u0A32\u0A47 \u0A2A\u0A71\u0A24\u0A47'},{v:'purple',l:'\u0A1C\u0A3E\u0A2E\u0A28\u0A40 \u0A2A\u0A71\u0A24\u0A47'},{v:'brown',l:'\u0A2D\u0A42\u0A30\u0A47 \u0A38\u0A3F\u0A30\u0A47'},{v:'stunted',l:'\u0A2C\u0A4C\u0A23\u0A3E \u0A35\u0A3F\u0A15\u0A3E\u0A38'}],
+  stages:['\u0A2C\u0A40\u0A1C \u0A09\u0A71\u0A17\u0A23\u0A3E','\u0A35\u0A27\u0A23\u0A3E','\u0A2B\u0A41\u0A71\u0A32 \u0A06\u0A09\u0A23\u0A3A','\u0A26\u0A3E\u0A23\u0A3E \u0A2D\u0A30\u0A28\u0A3E']
+}
+};
+
+// ── HELPERS ──────────────────────────────────────────────
+function t(k){return (T[lang]||T.en)[k]||(T.en)[k]||k;}
+function el(id){return document.getElementById(id);}
+function setTxt(id,v){var e=el(id);if(e&&v!==undefined)e.textContent=v;}
+function buildSel(id,opts){
+  var e=el(id);if(!e)return;
+  e.innerHTML=opts.map(function(o){
+    return typeof o==='string'?'<option value="'+o+'">'+o+'</option>':'<option value="'+(o.v||o)+'">'+o.l+'</option>';
+  }).join('');
+}
+
+// ── LANG SCREEN ───────────────────────────────────────────
+var pendingLang=null;
+function pickLang(code,name,elem){
+  pendingLang=code;
+  document.querySelectorAll('.lc').forEach(function(c){c.classList.remove('on');});
+  elem.classList.add('on');
+  var btn=el('lgo');btn.classList.add('on');
+  el('lgo-txt').textContent='Continue in '+name+' \u2192';
+}
+function startApp(){
+  if(!pendingLang)return;
+  lang=pendingLang;
+  el('lang-screen').classList.remove('on');
+  el('app').classList.add('on');
+  applyLang();setGreeting();initShare();setupPWA();renderJournal();
+}
+
+// ── TRANSLATIONS APPLY ────────────────────────────────────
+function applyLang(){
+  var d=T[lang]||T.en;
+  setTxt('nl-home',d.home);setTxt('nl-adv',d.adv);setTxt('nl-doc',d.doc);setTxt('nl-wea',d.wea);setTxt('nl-man',d.man);
+  setTxt('h-tools',d.tools);setTxt('tip-l',d.tip_l);setTxt('tip-t',d.tip);
+  setTxt('t-adv',d.adv);setTxt('t-doc',d.doc);setTxt('t-wea',d.wea);setTxt('t-man',d.man);
+  setTxt('adv-title',d.adv_title);setTxt('adv-sub',d.adv_sub);
+  setTxt('adv-cl',d.adv_cl);setTxt('adv-sl',d.adv_sl);
+  var ti=el('txt-issue');if(ti)ti.placeholder=d.adv_pl||'';
+  setTxt('adv-btn-t',d.adv_btn);setTxt('adv-rl',d.adv_rl);
+  setTxt('wx-title',d.wx_title);setTxt('wx-btn',d.wx_btn);setTxt('wx-load',d.wx_load);
+  setTxt('w-al',d.w_al);setTxt('w-hl',d.w_hl);setTxt('w-wl',d.w_wl);setTxt('w-fl',d.w_fl);setTxt('w-rl',d.w_rl);setTxt('w-pct',d.w_pct);
+  setTxt('man-title',d.man_title);setTxt('man-btn',d.man_btn);
+  setTxt('state-l',d.state_l);setTxt('dist-l',d.dist_l);setTxt('comm-l',d.comm_l);
+  buildSel('man-state',d.states);buildDistOpts();buildSel('man-crop',d.commodities);
+  setTxt('doc-title',d.doc_title);setTxt('doc-sub',d.doc_sub);
+  setTxt('uz-t',d.uz_t);setTxt('uz-s',d.uz_s);setTxt('ana-t',d.ana_t);
+  setTxt('conf-l',d.conf_l);setTxt('treat-l',d.treat_l);setTxt('prev-l',d.prev_l);
+  setTxt('h-light','\u2600\uFE0F '+d.h_light);setTxt('h-focus','\uD83D\uDD0D '+d.h_focus);setTxt('h-close','\uD83C\uDF3F '+d.h_close);
+  setTxt('soil-title',d.soil_title);setTxt('soil-type-l',d.soil_type_l);
+  setTxt('sandy-l',d.sandy);setTxt('loamy-l',d.loamy);setTxt('clayey-l',d.clayey);setTxt('black-l',d.black);
+  setTxt('sym-l',d.sym_l);setTxt('stage-l',d.stage_l);setTxt('soil-btn',d.soil_btn);
+  setTxt('n-l',d.n_l);setTxt('p-l',d.p_l);setTxt('k-l',d.k_l);
+  buildSel('sel-sym',d.symptoms);buildSel('sel-stage',d.stages);
+  setTxt('jrn-title',d.jrn_title);setTxt('jrn-add',d.jrn_add);
+  setTxt('jrn-btn',d.jrn_btn);buildSel('jrn-crop',d.crops);
+  setTxt('lang-l',d.lang_l);setTxt('cur-lang',d.cur_lang);
+  setTxt('share-t',d.share_t);setTxt('share-s',d.share_s);
+  setTxt('clr-l',d.clr_l);setTxt('clr-s',d.clr_s);
+  setTxt('iv-title','IVR Helpline');setTxt('iv-sub',d.iv_sub);setTxt('iv-desc',d.iv_desc);
+  setTxt('iv-press',d.iv_press);setTxt('iv-m1',d.iv_m1);setTxt('iv-m2',d.iv_m2);
+  setTxt('iv-m3',d.iv_m3);setTxt('iv-m4',d.iv_m4);setTxt('iv-m5',d.iv_m5);setTxt('iv-back',d.iv_back);
+  buildCropGrid();buildSeasonTabs();
+}
+
+function buildDistOpts(){
+  var d=T[lang]||T.en;
+  var stEl=el('man-state');var state=stEl?stEl.value:'';
+  var dists=(d.districts&&d.districts[state])||(T.en.districts[state])||['All Districts'];
+  buildSel('man-dist',dists);
+}
+
+function setGreeting(){
+  var d=T[lang]||T.en;var h=new Date().getHours();
+  var g=h<12?d.gm:h<17?d.ga:d.ge;
+  setTxt('h-greet',g+', '+d.farmer);
+  var now=new Date();
+  setTxt('h-date',now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'}));
+}
+
+// ── TABS ──────────────────────────────────────────────────
+function goTab(name){
+  document.querySelectorAll('[id^="p-"]').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('on');});
+  var p=el('p-'+name);if(p)p.classList.add('on');
+  var n=el('n-'+name);if(n)n.classList.add('on');
+  curTab=name;
+  if(name==='journal')renderJournal();
+}
+
+// ── VOICE ─────────────────────────────────────────────────
+function voicePress(){
+  var msg=t('tip');
+  if(!window.speechSynthesis){toast('TTS not supported');return;}
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(msg);
+  var locs={en:'en-IN',hi:'hi-IN',ta:'ta-IN',pa:'pa-IN'};
+  u.lang=locs[lang]||'en-IN';u.rate=0.85;
+  window.speechSynthesis.speak(u);
+  toast(t('tip_l')+'!');
+}
+function speak(msg){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(msg);
+  var locs={en:'en-IN',hi:'hi-IN',ta:'ta-IN',pa:'pa-IN'};
+  u.lang=locs[lang]||'en-IN';u.rate=0.85;
+  window.speechSynthesis.speak(u);
+}
+
+// ── ADVISORY ─────────────────────────────────────────────
+var ADV={
+  Wheat:{Kharif:'Wheat is not suitable for Kharif season. Sow in Rabi (Oct-Nov).',
+    Rabi:'Wheat Rabi:\n\u2022 Sow Nov 1-15\n\u2022 NPK: 120:60:40 kg/ha\n\u2022 Irrigate at CRI, tillering, jointing, flowering, grain fill\n\u2022 Yellow Rust: Propiconazole 1ml/L\n\u2022 Weed control: 2,4-D @ 0.5kg/ha at 35 days\n\u2022 Expected yield: 45-55 qtl/ha',
+    Zaid:'Wheat not suitable for Zaid.'},
+  Rice:{Kharif:'Rice Kharif:\n\u2022 Transplant at 21 days\n\u2022 Maintain 2-5cm standing water\n\u2022 NPK: 100:50:50 kg/ha\n\u2022 Monitor for Blast and BPH weekly',
+    Rabi:'Short-duration varieties only in South India.',Zaid:'Not recommended.'},
+  Maize:{Kharif:'Maize Kharif:\n\u2022 Sow June-July\n\u2022 Spacing: 60x20cm, NPK: 150:75:75 kg/ha\n\u2022 Fall Army Worm: Spinetoram 11.7SC @ 0.5ml/L',
+    Rabi:'Maize Rabi:\n\u2022 Sow Oct-Nov, drip irrigation preferred',
+    Zaid:'Short-duration variety. Frequent light irrigation.'},
+  Cotton:{Kharif:'Cotton Kharif:\n\u2022 Bt-hybrid seeds\n\u2022 NPK: 80:40:40 kg/ha\n\u2022 Pheromone traps for bollworm\n\u2022 Neem oil 3ml/L preventively',
+    Rabi:'Not suitable.',Zaid:'Not suitable.'},
+  Tomato:{Kharif:'Tomato Kharif:\n\u2022 Disease-resistant hybrids\n\u2022 Early Blight: Mancozeb 2g/L\n\u2022 Stake plants at 30cm',
+    Rabi:'Tomato Rabi (Best Season):\n\u2022 NPK: 100:60:80 kg/ha\n\u2022 Whitefly sticky traps\n\u2022 Irrigate every 5-7 days',
+    Zaid:'Use shade nets. Irrigate twice daily.'},
+  Potato:{Kharif:'Not suitable \u2014 tubers rot in heat.',
+    Rabi:'Potato Rabi (Best Season):\n\u2022 Plant Oct-Nov\n\u2022 NPK: 150:75:100 kg/ha\n\u2022 Late Blight: Metalaxyl+Mancozeb 2g/L',
+    Zaid:'Only in hills.'},
+  Onion:{Kharif:'Onion Kharif:\n\u2022 Reduce N after 60 days\n\u2022 Thrips: Spinosad @ 0.3ml/L',
+    Rabi:'Onion Rabi (Best Season):\n\u2022 NPK: 100:50:50 kg/ha\n\u2022 Harvest when 50% tops fall',
+    Zaid:'Not recommended.'},
+  Soybean:{Kharif:'Soybean Kharif:\n\u2022 Rhizobium + PSB inoculation\n\u2022 NPK: 20:60:40 kg/ha\n\u2022 Scout for girdle beetle',
+    Rabi:'Not suitable.',Zaid:'Not suitable.'},
+  Mustard:{Kharif:'Not suitable.',
+    Rabi:'Mustard Rabi:\n\u2022 Sow Oct 1-15\n\u2022 NPK: 80:40:40 kg/ha\n\u2022 Aphid: Thiamethoxam 25WG @ 0.5g/L',
+    Zaid:'Not suitable.'},
+  Groundnut:{Kharif:'Groundnut Kharif:\n\u2022 NPK: 25:50:75 kg/ha + gypsum 250kg/ha\n\u2022 Tikka leaf spot: Mancozeb 2g/L',
+    Rabi:'Possible in South with irrigation.',Zaid:'Not suitable.'},
+  Sugarcane:{Kharif:'Sugarcane:\n\u2022 NPK: 250:80:80 kg/ha in splits\n\u2022 Irrigate every 10-15 days\n\u2022 Trash mulch to conserve moisture',
+    Rabi:'Same schedule.',Zaid:'Same schedule.'},
+  Pulses:{Kharif:'Kharif Pulses:\n\u2022 Rhizobium inoculation\n\u2022 NPK: 20:40:20 kg/ha\n\u2022 Pod borer: Quinalphos 1ml/L',
+    Rabi:'Rabi Pulses:\n\u2022 Avoid waterlogging\n\u2022 1-2 protective irrigations',
+    Zaid:'Short-duration. Regular light irrigation.'}
+};
+
+function buildCropGrid(){
+  var d=T[lang]||T.en;var grid=el('crop-grid');if(!grid)return;
+  var html='';
+  d.crops.forEach(function(c){
+    var isSel=selCrop===c.v;
+    html+='<div class="ctile'+(isSel?' on':'')+'" data-v="'+c.v+'">'
+      +'<div style="font-size:28px;margin-bottom:4px;">'+c.l.split(' ')[0]+'</div>'
+      +'<div style="font-size:11px;font-weight:800;color:var(--g2);">'+c.l.replace(/^[^\s]+\s/,'')+'</div>'
+      +'</div>';
+  });
+  grid.innerHTML=html;
+  grid.querySelectorAll('[data-v]').forEach(function(item){
+    item.addEventListener('click',function(){
+      selCrop=this.getAttribute('data-v');buildCropGrid();
+    });
+  });
+}
+
+function buildSeasonTabs(){
+  var d=T[lang]||T.en;var tabs=el('season-tabs');if(!tabs)return;
+  var html='';
+  d.seasons.forEach(function(s){
+    var isSel=selSeason===s.v;
+    html+='<div class="stile'+(isSel?' on':'')+'" data-v="'+s.v+'">'
+      +'<div style="font-size:11px;font-weight:800;color:var(--g2);white-space:pre-line;">'+s.l+'</div>'
+      +'</div>';
+  });
+  tabs.innerHTML=html;
+  tabs.querySelectorAll('[data-v]').forEach(function(item){
+    item.addEventListener('click',function(){
+      selSeason=this.getAttribute('data-v');buildSeasonTabs();
+    });
+  });
+}
+
+function doAdv(){
+  if(!selCrop||!selSeason){toast(t('adv_cl')+' & '+t('adv_sl')+' ?');return;}
+  var btn=el('adv-btn');btn.disabled=true;btn.textContent='...';
+  var issue=el('txt-issue')?el('txt-issue').value.trim():'';
+  setTimeout(function(){
+    var advice=(ADV[selCrop]&&ADV[selCrop][selSeason])||
+      '\u2022 Apply balanced NPK (19:19:19) at sowing\n\u2022 Seed treatment before planting\n\u2022 Irrigate based on crop stage\n\u2022 Weekly pest monitoring';
+    if(issue)advice+='\n\nFor: "'+issue+'":\n\u2022 Monitor daily\n\u2022 Contact local KVK for expert help';
+    el('adv-txt').textContent=advice;
+    el('adv-out').classList.add('on');
+    btn.disabled=false;btn.textContent=t('adv_btn');
+    toast(t('adv_done'));speak(advice.substring(0,200));
+  },900);
+}
+
+// ── WEATHER ───────────────────────────────────────────────
+var WMO={0:'\u2600\uFE0F Clear',1:'\uD83C\uDF24\uFE0F Mainly Clear',2:'\u26C5 Partly Cloudy',3:'\u2601\uFE0F Overcast',
+  45:'\uD83C\uDF2B\uFE0F Foggy',51:'\uD83C\uDF26\uFE0F Drizzle',61:'\uD83C\uDF27\uFE0F Light Rain',
+  63:'\uD83C\uDF27\uFE0F Rain',65:'\uD83C\uDF27\uFE0F Heavy Rain',80:'\uD83C\uDF26\uFE0F Showers',95:'\u26C8\uFE0F Thunderstorm'};
+
+function getWeather(){
+  var loading=el('wx-loading');var result=el('wx-content');
+  loading.classList.remove('hidden');if(result)result.classList.add('hidden');
+  if(!navigator.geolocation){toast(t('loc_denied'));loading.classList.add('hidden');return;}
+  navigator.geolocation.getCurrentPosition(
+    function(pos){
+      var la=pos.coords.latitude;var lo=pos.coords.longitude;
+      var url='https://api.open-meteo.com/v1/forecast?latitude='+la+'&longitude='+lo+'&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation&wind_speed_unit=kmh';
+      fetch(url).then(function(r){return r.json();}).then(function(data){
+        var c=data.current;
+        var wmo=WMO[c.weather_code]||'\uD83C\uDF21\uFE0F Unknown';
+        var parts=wmo.split(' ');var em=parts[0];var desc=parts.slice(1).join(' ');
+        setTxt('w-em',em);setTxt('w-temp',Math.round(c.temperature_2m)+'\xB0C');
+        setTxt('w-cond',desc);setTxt('w-loc','\uD83D\uDCCD '+la.toFixed(2)+'\xB0N, '+lo.toFixed(2)+'\xB0E');
+        setTxt('w-hum',c.relative_humidity_2m);setTxt('w-wind',Math.round(c.wind_speed_10m));
+        setTxt('w-feel',Math.round(c.apparent_temperature));setTxt('w-rain',(c.precipitation||0).toFixed(1));
+        var tmp=c.temperature_2m;var rain=c.precipitation||0;
+        var adv=tmp>38?'Extreme heat! Irrigate evening only. Mulch urgently.':
+          tmp>33?'High temp. Irrigate early morning and evening.':
+          tmp<8?'Cold wave! Cover seedlings with polythene.':
+          rain>10?'Heavy rain! Ensure drainage. No spraying today.':
+          rain>2?'Light rain. Good for transplanting. Watch waterlogging.':
+          'Excellent conditions! Good for field work and spraying.';
+        setTxt('w-adv',adv);setTxt('dash-t',Math.round(tmp)+'\xB0C');
+        loading.classList.add('hidden');
+        if(result)result.classList.remove('hidden');
+        speak(Math.round(tmp)+' degrees. '+desc+'. '+adv);
+      }).catch(function(){loading.classList.add('hidden');toast(t('wx_fail'));});
+    },
+    function(){loading.classList.add('hidden');toast(t('loc_denied'));}
+  );
+}
+
+// ── MANDI ─────────────────────────────────────────────────
+var DEMO={
+  Wheat:[{market:'Ludhiana',modal:2350,min:2250,max:2450,trend:'up'}],
+  Rice:[{market:'Karnal',modal:1850,min:1780,max:1920,trend:'stable'}],
+  Maize:[{market:'Davangere APMC',modal:1720,min:1650,max:1800,trend:'up'}],
+  Cotton:[{market:'Rajkot',modal:6800,min:6500,max:7100,trend:'down'}],
+  Soybean:[{market:'Indore APMC',modal:4650,min:4500,max:4820,trend:'up'}],
+  Onion:[{market:'Lasalgaon',modal:1250,min:1100,max:1420,trend:'down'}],
+  Tomato:[{market:'Kolar APMC',modal:980,min:850,max:1200,trend:'up'}],
+  Potato:[{market:'Agra',modal:1150,min:1050,max:1280,trend:'stable'}],
+  Mustard:[{market:'Jaipur',modal:5200,min:5050,max:5380,trend:'up'}],
+  Groundnut:[{market:'Junagadh',modal:5800,min:5600,max:6100,trend:'up'}],
+  Sugarcane:[{market:'Meerut',modal:350,min:330,max:380,trend:'stable'}],
+  Chilli:[{market:'Guntur APMC',modal:9200,min:8800,max:9800,trend:'up'}]
+};
+
+function doMandi(){
+  var crop=el('man-crop')?el('man-crop').value:'Wheat';
+  var state=el('man-state')?el('man-state').value:'';
+  var dist=el('man-dist')?el('man-dist').value:'';
+  var key=el('api-key')?el('api-key').value.trim():'';
+  var out=el('mandi-out');if(!out)return;
+  out.innerHTML='<div style="padding:20px;text-align:center;color:var(--muted);"><div style="font-size:40px;">\u23F3</div><div style="margin-top:8px;font-weight:700;">Loading...</div></div>';
+  var data=DEMO[crop]||[{market:dist||state,modal:2000,min:1850,max:2200,trend:'stable'}];
+  var isLive=false;
+  var render=function(data,isLive){
+    var d=T[lang]||T.en;
+    var ti={up:d.rising,down:d.falling,stable:d.stable};
+    var tc={up:'color:#2E7D32',down:'color:var(--red)',stable:'color:var(--amb)'};
+    out.innerHTML=data.map(function(p){
+      return '<div style="background:var(--card);border-radius:var(--r);overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow);">'
+        +'<div style="background:linear-gradient(135deg,#BF360C,#E65100);padding:14px 17px;display:flex;justify-content:space-between;">'
+        +'<div style="font-size:15px;font-weight:800;color:#fff;">\uD83C\uDF3E '+crop+'</div>'
+        +'<span style="background:rgba(255,255,255,.2);color:#fff;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;">'+(isLive?'\uD83D\uDFE2 LIVE':'\u26A0\uFE0F DEMO')+'</span></div>'
+        +'<div>'
+        +'<div style="display:flex;justify-content:space-between;padding:12px 17px;border-bottom:1px solid var(--border);"><div style="font-size:12px;color:var(--muted);font-weight:700;">'+d.market_l+'</div><div style="font-size:13px;font-weight:700;">'+p.market+'</div></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:12px 17px;border-bottom:1px solid var(--border);"><div style="font-size:12px;color:var(--muted);font-weight:700;">'+d.modal_p+'</div><div style="font-size:17px;font-weight:900;color:var(--amb);">\u20B9'+p.modal.toLocaleString()+'/qtl</div></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:12px 17px;border-bottom:1px solid var(--border);"><div style="font-size:12px;color:var(--muted);font-weight:700;">'+d.min_p+'</div><div style="font-size:14px;font-weight:800;">\u20B9'+p.min.toLocaleString()+'</div></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:12px 17px;border-bottom:1px solid var(--border);"><div style="font-size:12px;color:var(--muted);font-weight:700;">'+d.max_p+'</div><div style="font-size:14px;font-weight:800;">\u20B9'+p.max.toLocaleString()+'</div></div>'
+        +'<div style="display:flex;justify-content:space-between;padding:12px 17px;"><div style="font-size:12px;color:var(--muted);font-weight:700;">'+d.trend_l+'</div><div style="font-size:14px;font-weight:800;'+(tc[p.trend]||'')+'">'+((ti[p.trend])||p.trend)+'</div></div>'
+        +'</div></div>';
+    }).join('');
+    toast(t('prices_done'));speak(crop+' '+t('modal_p')+' '+data[0].modal+' rupees.');
+  };
+  if(key){
+    var url='https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key='+key+'&format=json&filters[state]='+encodeURIComponent(state)+'&filters[commodity]='+encodeURIComponent(crop)+'&limit=5';
+    fetch(url).then(function(r){return r.json();}).then(function(d){
+      if(d.records&&d.records.length>0){
+        isLive=true;
+        data=d.records.map(function(x){return{market:x.market+', '+x.district,modal:+x.modal_price||0,min:+x.min_price||0,max:+x.max_price||0,trend:'stable'};});
+      }
+      render(data,isLive);
+    }).catch(function(){render(data,false);});
+  }else{render(data,false);}
+}
+
+// ── CROP DOCTOR ───────────────────────────────────────────
+// ── CROP DISEASE DETECTION (Free · Canvas pixel analysis) ────
+
+var _imgEl = null;
+
+function imgPicked(inp){
+  var f=inp.files[0]; if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(e){
+    var src=e.target.result;
+    var prev=el('img-prev');
+    if(prev){prev.src=src;prev.style.display='block';}
+    var uz=el('uz-lbl');if(uz)uz.classList.add('on');
+    setTxt('uz-t','Photo Ready \u2713');
+    var im=new Image();
+    im.onload=function(){
+      _imgEl=im;
+      var btn=el('ana-btn');if(btn)btn.disabled=false;
+    };
+    im.src=src;
+    var dr=el('dis-out');if(dr)dr.classList.remove('on');
+    var np=el('not-plant-msg');if(np)np.style.display='none';
+  };
+  rd.readAsDataURL(f);
+}
+
+// Returns pixel colour stats from the image via hidden canvas
+function analysePixels(imgEl){
+  var W=160,H=160;
+  var cv=document.createElement('canvas');
+  cv.width=W;cv.height=H;
+  var ctx=cv.getContext('2d');
+  ctx.drawImage(imgEl,0,0,W,H);
+  var data=ctx.getImageData(0,0,W,H).data;
+  var total=W*H;
+  var counts={green:0,yellow:0,brown:0,white:0,dark:0,grey:0,other:0};
+  for(var i=0;i<data.length;i+=4){
+    var r=data[i],g=data[i+1],b=data[i+2];
+    var brightness=(r+g+b)/3;
+    var mx=Math.max(r,g,b),mn=Math.min(r,g,b);
+    var sat=mx===0?0:(mx-mn)/mx;
+    if(brightness>215&&sat<0.12){counts.white++;continue;}
+    if(brightness<35){counts.dark++;continue;}
+    if(sat<0.10){counts.grey++;continue;}
+    // Green: g dominant and clearly above r and b
+    if(g>r&&g>b&&(g-Math.max(r,b))>18){counts.green++;continue;}
+    // Yellow: r and g both high, b low
+    if(r>140&&g>130&&b<100&&Math.abs(r-g)<60){counts.yellow++;continue;}
+    // Brown/rust: r dominant, moderate g, low b
+    if(r>g&&r>b&&r>90&&(r-b)>40&&g<160){counts.brown++;continue;}
+    counts.other++;
+  }
+  // convert to percentages
+  var pct={};
+  for(var k in counts)pct[k]=Math.round(counts[k]/total*100);
+  pct.greenish=pct.green+Math.round(pct.yellow*0.3); // partial credit
+  return pct;
+}
+
+// Decide if image is a plant based on colour profile
+function isPlantImage(pct){
+  // A plant/leaf should have meaningful green or yellow-green content
+  // Reject if green+yellow together are very low AND grey/white dominate (notebook, paper, wall, etc.)
+  var plantSignal=pct.green+pct.yellow;
+  var nonPlant=pct.grey+pct.white+pct.other;
+  if(plantSignal<8&&nonPlant>70)return false; // clearly not a plant
+  if(pct.green<5&&pct.yellow<6&&pct.brown<10)return false; // no plant colours at all
+  return true;
+}
+
+// Core diagnosis logic based on colour patterns
+function diagnose(pct){
+  var g=pct.green,y=pct.yellow,br=pct.brown,w=pct.white,dk=pct.dark;
+
+  // ── Healthy: lots of green, minimal yellowing/browning
+  if(g>45&&y<10&&br<8&&w<12){
+    return{
+      healthy:true,
+      name:'Healthy Plant \uD83C\uDF89',
+      conf:88+Math.round(g/10),
+      severity:'None',
+      treat:'No chemical treatment needed. Continue good farming practices.',
+      dosage:'No dosage required.',
+      prev:'Irrigate at crop stage. Apply balanced NPK. Scout weekly for early signs.',
+      urgency:'None'
+    };
+  }
+
+  // ── Yellowing (Nitrogen deficiency / Yellow Leaf Curl / Early Mosaic)
+  if(y>25&&g<30&&br<15){
+    var isVirus=y>38&&g<20;
+    return isVirus?{
+      healthy:false,
+      name:'Yellow Leaf Curl Virus (YLCV)',
+      conf:74,severity:'Moderate–Severe',
+      treat:'No cure for virus. Control whitefly vector immediately:\n\u2022 Imidacloprid 17.8SL @ 0.5 ml per litre of water — spray 200 litres per acre\n\u2022 Remove and destroy severely infected plants\n\u2022 Yellow sticky traps: 8 traps per acre',
+      dosage:'Spray Imidacloprid every 10 days for 3 sprays. Do not spray during flowering.',
+      prev:'Use virus-resistant varieties. Install insect-proof net on nursery. Remove weeds around field.',
+      urgency:'Immediate'
+    }:{
+      healthy:false,
+      name:'Nitrogen Deficiency / Chlorosis',
+      conf:78,severity:'Mild–Moderate',
+      treat:'\u2022 Urea spray: 2g per litre of water — spray 200 litres per acre as foliar dose\n\u2022 Soil application: Urea @ 25 kg per acre\n\u2022 If confirmed deficiency: DAP (Di-ammonium Phosphate) @ 50 kg per acre',
+      dosage:'Foliar urea spray twice — at 7-day interval. Soil urea in 2 split doses.',
+      prev:'Apply nitrogen in splits (at sowing, tillering, flowering). Use soil test before basal dose.',
+      urgency:'Within 3 days'
+    };
+  }
+
+  // ── Brown spots / lesions (Fungal diseases)
+  if(br>18&&g>10){
+    var highWhite=w>15;
+    // Brown + white patches → Powdery Mildew
+    if(highWhite){
+      return{
+        healthy:false,
+        name:'Powdery Mildew',
+        conf:81,severity:br>30?'Severe':'Moderate',
+        treat:'\u2022 Wettable Sulphur 80WP @ 3g per litre of water — spray 200 litres per acre\n\u2022 OR Hexaconazole 5EC @ 1ml per litre of water — spray 200 litres per acre\n\u2022 OR Karathane (Dinocap) @ 1ml per litre as alternative',
+        dosage:'First spray at disease appearance. Repeat after 10–12 days. Maximum 3 sprays per season.',
+        prev:'Avoid overhead irrigation. Ensure good air circulation. Remove infected plant debris.',
+        urgency:'Within 3 days'
+      };
+    }
+    // Brown lesions on green → Early Blight or Leaf Spot
+    if(br>30){
+      return{
+        healthy:false,
+        name:'Early Blight / Alternaria Leaf Spot',
+        conf:79,severity:'Moderate–Severe',
+        treat:'\u2022 Mancozeb 75WP @ 2.5g per litre of water — spray 200 litres per acre\n\u2022 OR Chlorothalonil 75WP @ 2g per litre of water\n\u2022 OR Copper Oxychloride 50WP @ 3g per litre as organic-friendly option',
+        dosage:'Spray at first symptom. Repeat every 7 days for 3 sprays. Stop 14 days before harvest.',
+        prev:'Crop rotation (avoid same family crops). Destroy infected leaves. Avoid wetting foliage.',
+        urgency:'Within 3 days'
+      };
+    }
+    // Moderate brown on green → Leaf Rust or Bacterial Blight
+    return{
+      healthy:false,
+      name:'Leaf Rust / Bacterial Leaf Blight',
+      conf:72,severity:'Mild–Moderate',
+      treat:'\u2022 For Rust: Propiconazole 25EC @ 1ml per litre of water — spray 200 litres per acre\n\u2022 For Bacterial Blight: Copper Bactericide (Blitox 50) @ 2g per litre of water\n\u2022 Streptocycline @ 0.1g per litre + Copper Oxychloride @ 3g per litre (combined spray)',
+      dosage:'Spray at disease onset. Repeat after 12–15 days. Avoid spraying in strong wind or rain.',
+      prev:'Use certified disease-free seeds. Avoid excess nitrogen. Remove ratoon crop debris.',
+      urgency:'Within 3 days'
+    };
+  }
+
+  // ── Mostly dark / dark lesions (Blast, Blight, Smut)
+  if(dk>20&&g>10){
+    return{
+      healthy:false,
+      name:'Rice Blast / Stem Blight',
+      conf:70,severity:'Moderate',
+      treat:'\u2022 Tricyclazole 75WP @ 0.6g per litre of water — spray 200 litres per acre\n\u2022 OR Isoprothiolane 40EC @ 1.5ml per litre of water\n\u2022 Carbendazim 50WP @ 1g per litre as secondary spray',
+      dosage:'Spray at tillering and panicle initiation stages. Repeat after 10 days if severe.',
+      prev:'Avoid excess nitrogen. Maintain proper spacing. Drain fields periodically.',
+      urgency:'Immediate'
+    };
+  }
+
+  // ── Mostly yellow-brown with little green (Dying / Severe infection)
+  if(y+br>40&&g<15){
+    return{
+      healthy:false,
+      name:'Severe Fungal Infection / Wilt',
+      conf:68,severity:'Severe',
+      treat:'\u2022 Carbendazim 50WP @ 1g per litre of water — drench soil around root zone (1 litre per plant)\n\u2022 OR Trichoderma viride @ 10g per litre as bio-control soil drench\n\u2022 Foliar: Mancozeb 75WP @ 2.5g per litre — spray 200 litres per acre',
+      dosage:'Soil drench twice at 15-day interval. Foliar spray weekly for 3 weeks.',
+      prev:'Avoid waterlogging. Use Trichoderma-enriched compost. Remove infected plants immediately.',
+      urgency:'Immediate'
+    };
+  }
+
+  // ── Fallback: some plant signal but unclear pattern
+  return{
+    healthy:false,
+    name:'Possible Nutrient Stress / Early Infection',
+    conf:55,severity:'Mild',
+    treat:'\u2022 Spray micronutrient mix (Multiplex / Agromin) @ 2g per litre — 200 litres per acre\n\u2022 Neem oil 1500 ppm @ 3ml per litre as protective spray\n\u2022 Get a soil test for accurate NPK recommendation',
+    dosage:'Foliar spray twice at 7-day interval. Re-photograph in 5 days to track progress.',
+    prev:'Ensure balanced NPK fertilization. Check irrigation frequency. Consult local KVK agronomist.',
+    urgency:'Within a week'
+  };
+}
+
+function doAnalyze(){
+  if(!_imgEl){toast('Please upload a photo first');return;}
+  var btn=el('ana-btn');
+  btn.disabled=true;
+  btn.innerHTML='\uD83D\uDD2C <span id="ana-t">Scanning image...</span>';
+
+  var dr=el('dis-out');if(dr)dr.classList.remove('on');
+  var np=el('not-plant-msg');if(np)np.style.display='none';
+
+  // slight delay so UI updates before heavy canvas work
+  setTimeout(function(){
+    var pct=analysePixels(_imgEl);
+
+    if(!isPlantImage(pct)){
+      // NOT a plant — show error, do not diagnose
+      var npMsg=el('not-plant-msg');
+      if(npMsg){
+        npMsg.style.display='block';
+      } else {
+        // create if missing
+        var div=document.createElement('div');
+        div.id='not-plant-msg';
+        div.style.cssText='background:#FFF3E0;border:2px solid #FF8F00;border-radius:16px;padding:18px;text-align:center;animation:pop .3s ease both;';
+        div.innerHTML='<div style="font-size:36px;margin-bottom:8px;">\u26A0\uFE0F</div>'
+          +'<div style="font-size:15px;font-weight:900;color:#E65100;">Not a Plant Photo</div>'
+          +'<div style="font-size:13px;color:#5D4037;margin-top:8px;line-height:1.6;font-weight:600;">'
+          +'This image does not appear to contain a crop or leaf.<br>'
+          +'Please take a <strong>close-up photo of the affected plant</strong> — leaf, stem, or fruit — in good light.</div>';
+        var stack=el('ana-btn').parentNode;
+        stack.insertBefore(div,el('dis-out'));
+      }
+      btn.disabled=false;
+      btn.innerHTML='\uD83D\uDD2C <span id="ana-t">'+t('ana_t')+'</span>';
+      toast('\u26A0\uFE0F Not a plant photo!');
+      return;
+    }
+
+    var result=diagnose(pct);
+    var isH=result.healthy;
+    var conf=Math.min(result.conf,97);
+
+    setTxt('dis-nm',isH?result.name:'\u26A0\uFE0F '+result.name);
+    setTxt('cfp',conf+'%');
+    var bar=el('cff');if(bar)bar.style.width=conf+'%';
+
+    // Build treatment block with urgency badge
+    var urgColor={Immediate:'#C62828',  'Within 3 days':'#E65100','Within a week':'#F57F17',None:'#2E7D32'};
+    var urg=result.urgency||'None';
+    var urgBadge=urg!=='None'
+      ?'<div style="display:inline-block;background:'+urgColor[urg]+';color:#fff;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:900;margin-bottom:10px;">\u23F0 Act: '+urg+'</div><br>'
+      :'';
+
+    var trtEl=el('ds-trt');
+    if(trtEl)trtEl.innerHTML=urgBadge+'<span style="white-space:pre-line;">'+result.treat+'</span>';
+
+    var dosEl=el('ds-dos');
+    if(dosEl){
+      dosEl.textContent=result.dosage;
+    }
+
+    var prvEl=el('ds-prv');
+    if(prvEl)prvEl.textContent=result.prev;
+
+    // colour confidence bar green for healthy, orange for disease
+    var barEl=el('cff');
+    if(barEl)barEl.style.background=isH?'var(--g2)':'var(--amb)';
+
+    if(dr)dr.classList.add('on');
+    btn.disabled=false;
+    btn.innerHTML='\uD83D\uDD2C <span id="ana-t">'+t('ana_again')+'</span>';
+    toast(t('ana_done'));
+    speak(isH?'Plant looks healthy!':'Detected: '+result.name+'. '+result.treat.substring(0,100));
+  },600);
+}
+
+// ── SOIL ─────────────────────────────────────────────────
+var SOIL={
+  sandy:{n:100,p:50,k:50,a:'Sandy soil drains fast. Add FYM 10t/ha. Split fertilization. Drip irrigation.'},
+  loamy:{n:80,p:40,k:40,a:'Loamy soil is ideal. Standard NPK works well. Green manure recommended.'},
+  clayey:{n:60,p:30,k:60,a:'Clay retains water. Subsoiling for drainage. Add gypsum.'},
+  black:{n:70,p:35,k:45,a:'Black cotton soil \u2014 fertile. Broad-bed furrow drainage. Best for cotton, soybean.'}
+};
+
+function setSoil(type,elem){
+  soilType=type;
+  document.querySelectorAll('.sbn').forEach(function(b){b.classList.remove('on');});
+  if(elem)elem.classList.add('on');
+}
+
+function doSoil(){
+  var s=SOIL[soilType];var a={n:s.n,p:s.p,k:s.k,a:s.a};
+  var sym=el('sel-sym')?el('sel-sym').value:'none';
+  if(sym==='yellow'){a.n+=20;a.a='Yellowing = Nitrogen deficiency. '+a.a;}
+  if(sym==='purple'){a.p+=15;a.a='Purple leaves = Phosphorus deficiency. '+a.a;}
+  if(sym==='brown'){a.k+=20;a.a='Brown tips = Potassium deficiency. '+a.a;}
+  setTxt('s-n',a.n);setTxt('s-p',a.p);setTxt('s-k',a.k);setTxt('soil-txt',a.a);
+  var out=el('soil-out');if(out)out.classList.add('on');
+  toast(t('rec_done'));speak('Apply '+a.n+' kg Nitrogen, '+a.p+' Phosphorus, '+a.k+' Potassium per hectare.');
+}
+
+// ── JOURNAL ───────────────────────────────────────────────
+function saveJournal(){
+  var crop=el('jrn-crop')?el('jrn-crop').value:'';
+  var note=el('jrn-note')?el('jrn-note').value.trim():'';
+  if(!note){toast('Write a note first');return;}
+  var entries=JSON.parse(localStorage.getItem('agrisathi_journal')||'[]');
+  entries.unshift({crop:crop,note:note,date:new Date().toLocaleDateString('en-IN'),ts:Date.now()});
+  localStorage.setItem('agrisathi_journal',JSON.stringify(entries));
+  el('jrn-note').value='';renderJournal();toast(t('jrn_saved'));
+}
+function renderJournal(){
+  var list=el('jrn-list');if(!list)return;
+  var entries=JSON.parse(localStorage.getItem('agrisathi_journal')||'[]');
+  if(!entries.length){
+    list.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--muted);"><div style="font-size:48px;margin-bottom:10px;">\uD83D\uDCD2</div><div style="font-weight:600;">No entries yet.</div></div>';
+    return;
+  }
+  list.innerHTML=entries.map(function(e,i){
+    return '<div style="background:var(--card);border-radius:14px;border:1.5px solid var(--border);padding:15px;box-shadow:var(--shadow);">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
+      +'<div style="font-size:14px;font-weight:800;color:var(--g2);">\uD83C\uDF3E '+e.crop+'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px;">'
+      +'<div style="font-size:11px;color:var(--muted);font-weight:600;">'+e.date+'</div>'
+      +'<button onclick="delJournal('+i+')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:18px;font-weight:900;padding:0 4px;">\xD7</button>'
+      +'</div></div>'
+      +'<div style="font-size:13px;margin-top:8px;line-height:1.6;font-weight:600;">'+e.note+'</div>'
+      +'</div>';
+  }).join('');
+}
+function delJournal(i){
+  var entries=JSON.parse(localStorage.getItem('agrisathi_journal')||'[]');
+  entries.splice(i,1);localStorage.setItem('agrisathi_journal',JSON.stringify(entries));renderJournal();
+}
+function clearJournal(){
+  if(confirm('Clear all journal entries?')){
+    localStorage.removeItem('agrisathi_journal');renderJournal();toast(t('jrn_cleared'));
+  }
+}
+
+// ── MODAL ─────────────────────────────────────────────────
+function openModal(){el('lang-modal').classList.add('on');}
+function closeModal(){el('lang-modal').classList.remove('on');}
+function modalOut(e){if(e.target===el('lang-modal'))closeModal();}
+function changeLang(code,elem){
+  lang=code;
+  document.querySelectorAll('.mo').forEach(function(o){o.classList.remove('on');});
+  if(elem)elem.classList.add('on');
+  applyLang();setGreeting();closeModal();
+  toast(t('lang_chg')+' \u2014 '+t('cur_lang'));
+}
+
+// ── IVR ───────────────────────────────────────────────────
+function openIVR(){el('app').classList.remove('on');el('ivr-screen').classList.add('on');}
+function closeIVR(){el('ivr-screen').classList.remove('on');el('app').classList.add('on');}
+
+// ── SHARE / PWA ───────────────────────────────────────────
+function initShare(){
+  var url=window.location.href;
+  var urlEl=el('share-url');if(urlEl)urlEl.textContent=url;
+  var qr=el('qr-box');
+  if(qr)qr.innerHTML='<img src="https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent(url)+'" style="width:100%;height:100%;border-radius:12px;" alt="QR">';
+}
+function shareWA(){window.open('https://wa.me/?text='+encodeURIComponent('AgriSathi AI Farmer App '+window.location.href),'_blank');}
+function copyLink(){
+  if(navigator.clipboard)navigator.clipboard.writeText(window.location.href).then(function(){toast(t('link_copied'));});
+  else toast(t('link_copied'));
+}
+function setupPWA(){
+  var card=el('inst-card');
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault();deferredInstall=e;if(card)card.style.display='block';
+  });
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&card)card.style.display='block';
+}
+function installApp(){if(deferredInstall){deferredInstall.prompt();deferredInstall.userChoice.then(function(){deferredInstall=null;});}}
+
+// ── TOAST ─────────────────────────────────────────────────
+var _tt;
+function toast(msg){
+  var s=el('snack');s.textContent=msg;s.classList.add('on');
+  clearTimeout(_tt);_tt=setTimeout(function(){s.classList.remove('on');},2500);
+}
+
+// ── INIT ──────────────────────────────────────────────────
+(function(){
+  setGreeting();
+  buildSel('man-state',T.en.states);
+  buildSel('man-dist',T.en.districts['Punjab']);
+  buildSel('man-crop',T.en.commodities);
+  buildSel('sel-sym',T.en.symptoms);
+  buildSel('sel-stage',T.en.stages);
+  buildSel('jrn-crop',T.en.crops);
+  buildCropGrid();buildSeasonTabs();
+})();
+
+</script>
+</body>
+</htmlvar _imgEl = null;
+
+function imgPicked(inp){
+  var f=inp.files[0]; if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(e){
+    var src=e.target.result;
+    var prev=el('img-prev');
+    if(prev){prev.src=src;prev.style.display='block';}
+    var uz=el('uz-lbl');if(uz)uz.classList.add('on');
+    setTxt('uz-t','Photo Ready \u2713');
+    var im=new Image();
+    im.onload=function(){ _imgEl=im; var btn=el('ana-btn');if(btn)btn.disabled=false; };
+    im.src=src;
+    var dr=el('dis-out');if(dr)dr.classList.remove('on');
+  };
+  rd.readAsDataURL(f);
+}
+
+function analysePixels(imgEl){
+  var W=160,H=160;
+  var cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  var ctx=cv.getContext('2d'); ctx.drawImage(imgEl,0,0,W,H);
+  var data=ctx.getImageData(0,0,W,H).data;
+  var total=W*H;
+  var green=0,yellow=0,brown=0,white=0,dark=0,grey=0;
+  for(var i=0;i<data.length;i+=4){
+    var r=data[i],g=data[i+1],b=data[i+2];
+    var brightness=(r+g+b)/3;
+    var mx=Math.max(r,g,b),mn=Math.min(r,g,b);
+    var sat=mx===0?0:(mx-mn)/mx;
+    if(brightness>215 && sat<0.12){white++;continue;}
+    if(brightness<45){dark++;continue;}
+    if(sat<0.10){grey++;continue;}
+    if(g>r && g>b && (g-Math.max(r,b))>18){green++;continue;}
+    if(r>140 && g>120 && b<90 && r>=g){yellow++;continue;}
+    if(r>100 && r>g && r>b && (r-Math.max(g,b))>25){brown++;continue;}
+    white++;
+  }
+  return {
+    green: green/total,
+    yellow: yellow/total,
+    brown: brown/total,
+    white: white/total,
+    dark: dark/total,
+    grey: grey/total,
+    plant: (green+yellow+brown)/total
+  };
+}
+
+function classifyDisease(px){
+  // NOT A PLANT: low plant-colour ratio means it's an object/notebook/person
+  if(px.plant < 0.10){
+    return {notPlant:true};
+  }
+
+  var g=px.green, y=px.yellow, br=px.brown, w=px.white;
+  var results=[];
+
+  // Score each disease pattern against pixel ratios
+  // Powdery Mildew — white patches on green leaf
+  if(w>0.18 && g>0.15){
+    results.push({
+      name:'Powdery Mildew',
+      conf:Math.round(65+Math.min(w*120,30)),
+      severity: w>0.30?'Severe':w>0.22?'Moderate':'Mild',
+      treatment:'Spray Wettable Sulphur 80WP @ 2.5 g per litre of water.\nUse 250–300 litres spray per acre.\nRepeat every 10–14 days for 3 sprays.',
+      alternative:'Hexaconazole 5SC @ 1 ml per litre of water.\n150–200 litres spray per acre.',
+      prev:'Avoid dense planting — maintain 30 cm row spacing.\nRemove and burn infected plant debris.\nAvoid overhead irrigation; use drip if possible.',
+      urgency:'Within 3 days'
+    });
+  }
+
+  // Leaf Rust — orange-brown pustules on green
+  if(br>0.12 && g>0.20 && y<0.15){
+    results.push({
+      name:'Leaf Rust (Fungal)',
+      conf:Math.round(60+Math.min(br*150,32)),
+      severity: br>0.28?'Severe':br>0.18?'Moderate':'Mild',
+      treatment:'Spray Propiconazole 25EC @ 1 ml per litre of water.\nUse 200 litres spray per acre.\nRepeat after 15 days if symptoms persist.',
+      alternative:'Mancozeb 75WP @ 2.5 g per litre of water.\n200 litres spray per acre.',
+      prev:'Use certified rust-resistant seed varieties.\nSow crops on time (Nov 1–15 for wheat).\nAvoid excess nitrogen fertilizer.',
+      urgency:'Within 3 days'
+    });
+  }
+
+  // Yellow leaf / Bacterial Blight — yellowing with brown edges
+  if(y>0.15 && g>0.12 && br>0.06){
+    results.push({
+      name:'Bacterial Leaf Blight',
+      conf:Math.round(62+Math.min(y*100,28)),
+      severity: y>0.30?'Severe':y>0.20?'Moderate':'Mild',
+      treatment:'Spray Copper Oxychloride 50WP (Blitox) @ 3 g per litre of water.\nUse 200–250 litres spray per acre.\nRepeat every 10 days for 2–3 sprays.',
+      alternative:'Streptomycin Sulphate @ 0.5 g + Copper Sulphate @ 3 g per litre.\n200 litres spray per acre.',
+      prev:'Use disease-free certified seeds.\nSeed treatment: soak in Streptomycin 1 g/10 litres for 12 hrs.\nAvoid waterlogging and overhead irrigation.',
+      urgency:'Immediate'
+    });
+  }
+
+  // Nitrogen deficiency — strong yellowing, little brown/white
+  if(y>0.20 && br<0.10 && w<0.12 && g>0.08){
+    results.push({
+      name:'Nitrogen Deficiency (Yellowing)',
+      conf:Math.round(68+Math.min(y*80,24)),
+      severity: y>0.35?'Severe':y>0.22?'Moderate':'Mild',
+      treatment:'Apply Urea (46% N) @ 5 kg per acre as top-dressing.\nFor quick response: spray 2% Urea solution (20 g per litre).\nUse 150 litres spray per acre.',
+      alternative:'Apply DAP @ 2 kg per acre in irrigation water.',
+      prev:'Apply balanced NPK at sowing: 120:60:40 kg N:P:K per hectare.\nSplit nitrogen: 50% at sowing, 25% at tillering, 25% at jointing.',
+      urgency:'Within 3 days'
+    });
+  }
+
+  // Early Blight — brown/dark spots on moderately green leaf
+  if(br>0.18 && dark>0.05 && g>0.10){
+    results.push({
+      name:'Early Blight (Alternaria)',
+      conf:Math.round(60+Math.min((br+dark)*100,30)),
+      severity: br>0.30?'Severe':br>0.20?'Moderate':'Mild',
+      treatment:'Spray Mancozeb 75WP @ 2 g per litre of water.\nUse 200 litres spray per acre.\nRepeat every 7–10 days for 3 sprays.',
+      alternative:'Chlorothalonil 75WP @ 2 g per litre. 200 litres/acre.',
+      prev:'Maintain 30 cm plant spacing for airflow.\nRemove infected lower leaves immediately.\nAvoid wetting foliage while irrigating.',
+      urgency:'Within 3 days'
+    });
+  }
+
+  // Healthy — dominant green, low disease signals
+  if(g>0.35 && y<0.12 && br<0.10 && w<0.15){
+    results.push({
+      name:'Healthy Plant \uD83C\uDF89',
+      conf:Math.round(75+Math.min(g*60,20)),
+      severity:'None',
+      treatment:'No treatment required. Plant looks healthy.',
+      alternative:'Continue regular monitoring every 5–7 days.',
+      prev:'Maintain irrigation schedule.\nApply balanced fertilizer as per crop stage.\nWeekly scouting for early pest detection.',
+      urgency:'None'
+    });
+  }
+
+  // If no pattern matched clearly, give a generic low-confidence flag
+  if(results.length===0){
+    results.push({
+      name:'Possible Disease (Unconfirmed)',
+      conf:42,
+      severity:'Unknown',
+      treatment:'Unable to confirm specific disease. Take a clearer, closer photo of the affected leaf in good natural light.',
+      alternative:'Contact your local Krishi Vigyan Kendra (KVK) or call 1800-180-1551 for expert help.',
+      prev:'Monitor plant daily.\nAvoid overhead irrigation.\nRemove visibly infected leaves.',
+      urgency:'Within a week'
+    });
+  }
+
+  // Return highest confidence result
+  results.sort(function(a,b){return b.conf-a.conf;});
+  return {notPlant:false, result:results[0]};
+}
+
+function doAnalyze(){
+  if(!_imgEl){toast('Please upload a photo first');return;}
+  var btn=el('ana-btn');
+  btn.disabled=true;
+  btn.innerHTML='\uD83D\uDD2C <span id="ana-t">Scanning pixels...</span>';
+
+  var dr=el('dis-out'); if(dr)dr.classList.remove('on');
+
+  setTimeout(function(){
+    var px = analysePixels(_imgEl);
+    var classified = classifyDisease(px);
+
+    btn.disabled=false;
+    btn.innerHTML='\uD83D\uDD2C <span id="ana-t">'+t('ana_again')+'</span>';
+
+    if(classified.notPlant){
+      // Show rejection message — not a plant photo
+      setTxt('dis-nm','\u274C Not a Plant Photo');
+      var bar=el('cff');if(bar)bar.style.width='0%';
+      setTxt('cfp','--');
+      setTxt('ds-trt','This image does not appear to be a crop or plant.\n\nPlease take a clear, close-up photo of:\n\u2022 An infected leaf (showing spots, yellowing, or lesions)\n\u2022 In good natural daylight\n\u2022 Within 20\u201330 cm distance from the plant\n\nPhotos of notebooks, objects, people, or distant landscapes cannot be analysed.');
+      setTxt('ds-prv','Tips for a good photo:\n\u2022 Hold phone 20 cm from affected leaf\n\u2022 Use bright outdoor light\n\u2022 Make sure leaf fills most of the frame\n\u2022 Keep camera steady and in focus');
+      if(dr){
+        dr.style.borderColor='var(--red)';
+        dr.classList.add('on');
+      }
+      var bar2=el('cff');if(bar2)bar2.style.background='var(--red)';
+      toast('\u274C Not a plant photo — try again');
+      speak('This does not look like a plant photo. Please take a close up photo of a crop leaf.');
+      return;
+    }
+
+    // Reset bar colour for plant results
+    var bar3=el('cff');if(bar3)bar3.style.background='var(--tel)';
+    if(dr)dr.style.borderColor='';
+
+    var res=classified.result;
+    var isHealthy=res.severity==='None';
+    var icon=isHealthy?'\uD83C\uDF89':(res.severity==='Severe'?'\uD83D\uDD34':res.severity==='Moderate'?'\uD83D\uDFE1':'\uD83D\uDFE2');
+
+    setTxt('dis-nm', icon+' '+res.name);
+    setTxt('cfp', res.conf+'%');
+    var bar4=el('cff');if(bar4)bar4.style.width=res.conf+'%';
+
+    var treatText = res.treatment;
+    if(!isHealthy && res.alternative){
+      treatText += '\n\nAlternative:\n' + res.alternative;
+    }
+    if(!isHealthy){
+      treatText += '\n\nUrgency: '+res.urgency;
+    }
+    setTxt('ds-trt', treatText);
+    setTxt('ds-prv', res.prev);
+
+    if(dr)dr.classList.add('on');
+    toast(isHealthy ? '\uD83C\uDF89 Plant is healthy!' : '\u26A0\uFE0F '+res.name+' detected');
+    speak(isHealthy
+      ? 'Good news! Your plant looks healthy. Keep monitoring regularly.'
+      : res.name+' detected. '+res.treatment.split('\n')[0]);
+  }, 1200);
+}>
